@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.openclassrooms.mdd.dto.request.CommentRequest;
 import com.openclassrooms.mdd.dto.response.CommentResponse;
 import com.openclassrooms.mdd.dto.response.ErrorResponse;
+import com.openclassrooms.mdd.service.auth.JWTService;
 import com.openclassrooms.mdd.service.command.CommentCommandService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +20,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -31,9 +33,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/comments")
 public class CommentRestController {
     private final CommentCommandService commentCommandService;
+    private final JWTService jwtService;
 
-    public CommentRestController(CommentCommandService commentCommandService) {
+    public CommentRestController(CommentCommandService commentCommandService,JWTService jwtService) {
         this.commentCommandService = commentCommandService;
+        this.jwtService = jwtService;
     }
 
     @Operation(summary = "Create a comment", description = "Add a new comment to the system.")
@@ -42,9 +46,10 @@ public class CommentRestController {
             @ApiResponse(responseCode = "400", description = "Bad Request - Invalid input", content = @Content)
     })
     @PostMapping("")
-    public ResponseEntity<CommentResponse> createComment(@Valid @RequestBody CommentRequest body) {
+    public ResponseEntity<CommentResponse> create(@Valid @RequestBody CommentRequest body, Authentication authentication) {
+        Long userId = jwtService.getUserId(authentication);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(this.commentCommandService.create(body));
+                .body(this.commentCommandService.create(body,userId));
 
     }
 
