@@ -31,6 +31,11 @@ public class GlobalExceptionHandler {
         return buildErrorResponse("Invalid email or password.", HttpStatus.UNAUTHORIZED, request);
     }
 
+    @ExceptionHandler(UnauthorizedActionException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedAction(UnauthorizedActionException ex, WebRequest request) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.FORBIDDEN, request);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestFound(IllegalArgumentException ex, WebRequest request) {
         return buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST, request);
