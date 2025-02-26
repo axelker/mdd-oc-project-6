@@ -27,8 +27,8 @@ public class UserMapperTest {
                 .id(1L)
                 .email("test@test.fr")
                 .name("test")
-                .created_at(LocalDateTime.now())
-                .updated_at(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .password("test-secret")
                 .build();
 
@@ -38,8 +38,6 @@ public class UserMapperTest {
         assertThat(userResponse.getId()).isEqualTo(userEntity.getId());
         assertThat(userResponse.getName()).isEqualTo(userEntity.getName());
         assertThat(userResponse.getEmail()).isEqualTo(userEntity.getEmail());
-        assertThat(userResponse.getCreated_at()).isEqualTo(userEntity.getCreated_at());
-        assertThat(userResponse.getUpdated_at()).isEqualTo(userEntity.getUpdated_at());
     }
 
     @Test

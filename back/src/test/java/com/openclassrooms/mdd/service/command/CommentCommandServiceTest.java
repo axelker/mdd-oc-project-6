@@ -30,8 +30,8 @@ public class CommentCommandServiceTest {
     @Test
     void createCommentSuccess() {
         CommentRequest messageRequest = CommentRequest.builder()
-                .user_id(1L)
-                .article_id(2L)
+                .userId(1L)
+                .articleId(2L)
                 .message("test message")
                 .build();
 

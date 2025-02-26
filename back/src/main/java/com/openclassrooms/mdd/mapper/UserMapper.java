@@ -16,7 +16,7 @@ public interface UserMapper {
     UserResponse toDto(UserEntity entity);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "created_at", ignore = true)
-    @Mapping(target = "updated_at", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     UserEntity authRegisterToEntity(AuthRegisterRequest request);
 }

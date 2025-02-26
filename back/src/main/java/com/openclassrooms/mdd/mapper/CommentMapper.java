@@ -16,10 +16,10 @@ public interface CommentMapper {
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "created_at", ignore = true)
-    @Mapping(target = "updated_at", ignore = true)
-    @Mapping(target = "user", source = "user_id", qualifiedByName = "mapUserById")
-    @Mapping(target = "article", source = "article_id", qualifiedByName = "mapArticleById")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "user", source = "userId", qualifiedByName = "mapUserById")
+    @Mapping(target = "article", source = "articleId", qualifiedByName = "mapArticleById")
     CommentEntity toEntity(CommentRequest message);
 
     @Named("mapUserById")
@@ -28,7 +28,7 @@ public interface CommentMapper {
     }
 
     @Named("mapArticleById")
-    default ArticleEntity mapArticleById(Long article_id) {
-        return article_id == null ? null : ArticleEntity.builder().id(article_id).build();
+    default ArticleEntity mapArticleById(Long articleId) {
+        return articleId == null ? null : ArticleEntity.builder().id(articleId).build();
     }
 }
