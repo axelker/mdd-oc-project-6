@@ -12,8 +12,7 @@ public class CommentRequest {
     @NotNull(message = "message is required.")
     @Size(max = 2000)
     private String message;
-    @NotNull(message = "user_id is required.")
-    private Long user_id;
-    @NotNull(message = "article_id is required.")
-    private Long article_id;
+
+    @NotNull(message = "articleId is required.")
+    private Long articleId;
 }

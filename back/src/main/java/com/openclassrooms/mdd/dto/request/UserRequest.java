@@ -7,12 +7,14 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AuthRegisterRequest {
+public class UserRequest {
+
     @NotNull(message = "Name is required.")
     private String name;
+
     @NotNull(message = "Email is required.")
     @Email
     private String email;
-    @NotNull(message = "Password is required.")
-    private String password;
+
+
 }

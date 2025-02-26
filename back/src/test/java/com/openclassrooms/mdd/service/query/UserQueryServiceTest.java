@@ -38,8 +38,8 @@ public class UserQueryServiceTest {
                 .id(1L)
                 .email("test@test.fr")
                 .name("test")
-                .created_at(LocalDateTime.now())
-                .updated_at(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .password("test-secret")
                 .build();
 
