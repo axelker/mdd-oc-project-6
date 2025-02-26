@@ -3,6 +3,7 @@ package com.openclassrooms.mdd.service.command;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mdd.dto.request.CommentRequest;
+import com.openclassrooms.mdd.dto.response.CommentResponse;
 import com.openclassrooms.mdd.mapper.CommentMapper;
 import com.openclassrooms.mdd.repository.CommentRepository;
 
@@ -17,7 +18,7 @@ public class CommentCommandService {
         this.commentMapper = commentMapper;
     }
 
-    public void createComment(CommentRequest message) {
-        commentRepository.save(commentMapper.toEntity(message));
+    public CommentResponse create(CommentRequest comment) {
+        return commentMapper.toDto(commentRepository.save(commentMapper.toEntity(comment)));
     }
 }

@@ -42,7 +42,7 @@ public class CommentCommandServiceTest {
         when(commentMapper.toEntity(messageRequest)).thenReturn(messageEntity);
         when(commentRepository.save(messageEntity)).thenReturn(messageEntity);
 
-        commentCommandService.createComment(messageRequest);
+        commentCommandService.create(messageRequest);
         verify(commentRepository, times(1)).save(messageEntity);
     }
 

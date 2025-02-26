@@ -6,6 +6,7 @@ import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import com.openclassrooms.mdd.dto.request.CommentRequest;
+import com.openclassrooms.mdd.dto.response.CommentResponse;
 import com.openclassrooms.mdd.model.CommentEntity;
 import com.openclassrooms.mdd.model.ArticleEntity;
 import com.openclassrooms.mdd.model.UserEntity;
@@ -21,6 +22,10 @@ public interface CommentMapper {
     @Mapping(target = "user", source = "userId", qualifiedByName = "mapUserById")
     @Mapping(target = "article", source = "articleId", qualifiedByName = "mapArticleById")
     CommentEntity toEntity(CommentRequest message);
+
+    @Mapping(target = "ownerId", source = "user.id")
+    @Mapping(target = "articleId", source = "article.id")
+    CommentResponse toDto(CommentEntity comment);
 
     @Named("mapUserById")
     default UserEntity mapUserById(Long userId) {
