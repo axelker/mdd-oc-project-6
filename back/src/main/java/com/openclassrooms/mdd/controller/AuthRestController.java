@@ -1,15 +1,20 @@
 package com.openclassrooms.mdd.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.openclassrooms.mdd.dto.request.AuthLoginRequest;
 import com.openclassrooms.mdd.dto.request.AuthRegisterRequest;
+import com.openclassrooms.mdd.dto.request.UserRequest;
 import com.openclassrooms.mdd.dto.response.AuthResponse;
 import com.openclassrooms.mdd.dto.response.ErrorResponse;
 import com.openclassrooms.mdd.dto.response.UserResponse;
 import com.openclassrooms.mdd.service.auth.AuthenticationService;
+import com.openclassrooms.mdd.service.auth.JWTService;
+import com.openclassrooms.mdd.service.command.UserCommandeService;
+import com.openclassrooms.mdd.service.query.UserQueryService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,9 +39,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequestMapping("/auth")
 public class AuthRestController {
     private final AuthenticationService authService;
+    private final UserQueryService userQueryService;
+    private final UserCommandeService userCommandService;
+    private final JWTService jwtService;
 
-    AuthRestController(AuthenticationService authService) {
+    AuthRestController(AuthenticationService authService,UserQueryService userQueryService,UserCommandeService userCommandService,JWTService jwtService) {
         this.authService = authService;
+        this.userQueryService = userQueryService;
+        this.userCommandService = userCommandService;
+        this.jwtService = jwtService;
     }
 
     @Operation(summary = "Find info of current user authenticate", description = "Retrieve details of a user using its authentication information.")
@@ -48,7 +59,23 @@ public class AuthRestController {
     })
     @GetMapping("me")
     public ResponseEntity<UserResponse> getMe(Authentication authentication) {
-        return ResponseEntity.ok(authService.getUserInfo(authentication));
+        Long userId = jwtService.getUserId(authentication);
+        return ResponseEntity.ok(userQueryService.findById(userId));
+    }
+
+    @Operation(
+        summary = "Update current user",
+        description = "Allows the authenticated user to update their profile information."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User updated successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request - Invalid input (e.g., missing fields, incorrect format)", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not Found - User does not exist", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PutMapping("me")
+    public ResponseEntity<UserResponse> update(@Valid @RequestBody UserRequest body,Authentication authentication) {
+        Long userId = jwtService.getUserId(authentication);
+        return ResponseEntity.ok(userCommandService.update(body,userId));
     }
 
     @Operation(summary = "User Login", description = "Authenticate user and return a JWT token.")

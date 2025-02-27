@@ -22,7 +22,7 @@ public class UserQueryService implements UserDetailsService {
         this.userMapper = userMapper;
     }
 
-    public UserResponse getUserById(Long id) throws NoSuchElementException {
+    public UserResponse findById(Long id) throws NoSuchElementException {
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
         return userMapper.toDto(user);
