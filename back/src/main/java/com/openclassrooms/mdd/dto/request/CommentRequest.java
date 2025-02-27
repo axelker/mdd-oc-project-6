@@ -13,6 +13,4 @@ public class CommentRequest {
     @Size(max = 2000)
     private String message;
 
-    @NotNull(message = "articleId is required.")
-    private Long articleId;
 }

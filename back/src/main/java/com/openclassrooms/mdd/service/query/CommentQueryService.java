@@ -1,5 +1,6 @@
-package com.openclassrooms.mdd.service.command;
+package com.openclassrooms.mdd.service.query;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
@@ -15,14 +16,13 @@ import com.openclassrooms.mdd.repository.CommentRepository;
 import com.openclassrooms.mdd.repository.UserRepository;
 
 @Service
-public class CommentCommandService {
-
+public class CommentQueryService {
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
     private final CommentMapper commentMapper;
 
-    public CommentCommandService(CommentRepository commentRepository,ArticleRepository articleRepository, UserRepository userRepository,
+    public CommentQueryService(CommentRepository commentRepository,ArticleRepository articleRepository, UserRepository userRepository,
             CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.articleRepository = articleRepository;
@@ -30,18 +30,13 @@ public class CommentCommandService {
         this.commentMapper = commentMapper;
     }
 
-    public CommentResponse create(CommentRequest comment,Long articleId,Long userId) {
-        UserEntity user = userRepository.findById(userId)
+    public List<CommentResponse> findAll(Long articleId,Long userId) {
+        userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id: " + userId));
         
-        ArticleEntity article = articleRepository.findById(articleId)
+        articleRepository.findById(articleId)
                 .orElseThrow(() -> new NoSuchElementException("Article not found with id: " + articleId));
         
-        CommentEntity entity = commentMapper.toEntity(comment);
-        entity = entity.toBuilder()
-                .user(user)
-                .article(article)
-                .build();
-        return commentMapper.toDto(commentRepository.save(entity));
+        return commentRepository.findAllByArticleIdAndUserId(articleId,userId).stream().map(commentMapper::toDto).toList();
     }
 }
