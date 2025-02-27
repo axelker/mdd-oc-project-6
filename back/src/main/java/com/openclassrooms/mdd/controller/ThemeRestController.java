@@ -6,17 +6,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.openclassrooms.mdd.dto.response.CommentResponse;
 import com.openclassrooms.mdd.dto.response.ErrorResponse;
 import com.openclassrooms.mdd.dto.response.Response;
-import com.openclassrooms.mdd.dto.response.ThemesResponse;
+import com.openclassrooms.mdd.dto.response.ThemeResponse;
 import com.openclassrooms.mdd.service.auth.JWTService;
 import com.openclassrooms.mdd.service.command.SubscriptionCommandService;
 import com.openclassrooms.mdd.service.query.ThemeQueryService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +47,13 @@ public class ThemeRestController {
         this.jwtService = jwtService;
     }
 
-    @Operation(summary = "Get all themes", description = "Retrieve all available themes.")
+    @Operation(summary = "Get all themes", description = "Retrieve all available themes. This endpoint returns a list of themes that can be used in the application.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of themes retrieved successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ThemeResponse.class)))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected server issue", content = @Content)
+    })
     @GetMapping
-    public ResponseEntity<ThemesResponse> getAllThemes() {
+    public ResponseEntity<List<ThemeResponse>> getAllThemes() {
         return ResponseEntity.ok(themeQueryService.findAll());
     }
 

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.openclassrooms.mdd.dto.request.ArticleRequest;
 import com.openclassrooms.mdd.dto.request.CommentRequest;
 import com.openclassrooms.mdd.dto.response.ArticleResponse;
-import com.openclassrooms.mdd.dto.response.ArticlesResponse;
 import com.openclassrooms.mdd.dto.response.CommentResponse;
 import com.openclassrooms.mdd.dto.response.ErrorResponse;
 import com.openclassrooms.mdd.service.auth.JWTService;
@@ -75,11 +74,12 @@ public class ArticleRestController {
     @Operation(summary = "Get articles from followed themes", description = "Retrieves all articles from the themes the authenticated user is subscribed to. "
             + "The results can be sorted by creation date.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Articles retrieved successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ArticlesResponse.class))),
+            @ApiResponse(responseCode = "200", description = "Articles retrieved successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ArticleResponse.class)))),
             @ApiResponse(responseCode = "400", description = "Bad Request - Invalid sorting parameter", content = @Content),
     })
     @GetMapping("")
-    public ResponseEntity<ArticlesResponse> findAll(@RequestParam(required = false, defaultValue = "true") Boolean desc,
+    public ResponseEntity<List<ArticleResponse>> findAll(
+            @RequestParam(required = false, defaultValue = "true") Boolean desc,
             Authentication authentication) {
         Long userId = jwtService.getUserId(authentication);
         return ResponseEntity.ok(articleQueryService.findAllSubscribedByUser(desc.booleanValue(), userId));

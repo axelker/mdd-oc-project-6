@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mdd.dto.response.ArticleResponse;
-import com.openclassrooms.mdd.dto.response.ArticlesResponse;
 import com.openclassrooms.mdd.mapper.ArticleMapper;
 import com.openclassrooms.mdd.model.ArticleEntity;
 import com.openclassrooms.mdd.repository.ArticleRepository;
@@ -25,19 +24,18 @@ public class ArticleQueryService {
         this.subscriptionQueryService = subscriptionQueryService;
     }
 
-    public ArticlesResponse findAllSubscribedByUser(boolean desc,Long userId) {
+    public List<ArticleResponse> findAllSubscribedByUser(boolean desc,Long userId) {
         List<Long> userSubThemeIds = subscriptionQueryService.getThemeIdsUserSub(userId);
 
         if (userSubThemeIds.isEmpty()) {
-            return ArticlesResponse.builder().articles(List.of()).build();
+            return List.of();
         }
         
         Sort sort = desc ? Sort.by(Sort.Direction.DESC, "createdAt") : Sort.by(Sort.Direction.ASC, "createdAt");
 
-        List<ArticleResponse> articles = articleRepository.findAllByThemeIdIn(userSubThemeIds,sort).stream()
+        return articleRepository.findAllByThemeIdIn(userSubThemeIds,sort).stream()
                 .map(articleMapper::toDto)
                 .toList();
-        return ArticlesResponse.builder().articles(articles).build();
     }
 
     public ArticleResponse findById(Long id) {
