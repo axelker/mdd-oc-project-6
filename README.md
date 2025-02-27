@@ -66,7 +66,11 @@ Find the script inside the resources of the project.
 ```sh
 source path/to/create_database.sql;
 ```
+By default, the database is initialized with two themes and one test user.
 
+Test User Credentials:
+✉️ Email: test@test.com
+🔑 Password: test!1234
 
 ### Executing program
 
