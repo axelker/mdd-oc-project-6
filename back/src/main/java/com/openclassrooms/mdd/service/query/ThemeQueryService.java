@@ -23,7 +23,7 @@ public class ThemeQueryService {
     public ThemesResponse findAll() {
        List<ThemeResponse> themes = themeRepository.findAll().stream()
                 .map(themeMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
         return ThemesResponse.builder().themes(themes).build();
     }
     
