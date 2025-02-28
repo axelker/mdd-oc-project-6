@@ -33,13 +33,13 @@ public class UserQueryServiceTest {
     private UserQueryService userQueryService;
 
     @Test
-    void getUserById_shouldReturnUser_whenUserExists() {
+    void findById_shouldReturnUser_whenUserExists() {
         UserEntity userEntity = UserEntity.builder()
                 .id(1L)
                 .email("test@test.fr")
                 .name("test")
-                .created_at(LocalDateTime.now())
-                .updated_at(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .password("test-secret")
                 .build();
 
@@ -47,9 +47,8 @@ public class UserQueryServiceTest {
         when(userRepository.findById(1L))
                 .thenReturn(Optional.of(userEntity));
         when(userMapper.toDto(userEntity)).thenReturn(userResponse);
-        var result = userQueryService.getUserById(1L);
+        var result = userQueryService.findById(1L);
 
-        // Vérifications
         assertNotNull(result);
         assertEquals(userResponse.getId(), result.getId());
         assertEquals(userResponse.getEmail(), result.getEmail());
@@ -59,11 +58,11 @@ public class UserQueryServiceTest {
     }
 
     @Test
-    void getUserById_shouldThrowException_whenUserDoesNotExist() {
+    void findById_shouldThrowException_whenUserDoesNotExist() {
         when(userRepository.findById(2L)).thenReturn(Optional.empty());
 
         NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
-            userQueryService.getUserById(2L);
+            userQueryService.findById(2L);
         });
 
         assertEquals("User not found", exception.getMessage());

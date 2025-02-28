@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @Table(name = "users")
 @NoArgsConstructor
 public class UserEntity extends Auditable implements UserDetails {

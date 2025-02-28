@@ -7,12 +7,14 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AuthLoginRequest {
+public class UserRequest {
 
-    @NotNull(message = "email is required.")
+    @NotNull(message = "Name is required.")
+    private String name;
+
+    @NotNull(message = "Email is required.")
     @Email
     private String email;
 
-    @NotNull(message="password is required")
-    private String password;
+
 }

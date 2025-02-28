@@ -7,14 +7,11 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class RentalResponse {
+public class ArticleResponse {
     private Long id;
     private String name;
-    private double surface;
-    private double price;
-    private String[] picture;
     private String description;
-    private Long owner_id;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private Long ownerId;
+    private Long themeId;
+    private LocalDateTime createdAt;
 }
