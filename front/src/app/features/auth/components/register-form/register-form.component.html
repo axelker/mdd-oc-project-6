@@ -1,0 +1,9 @@
+<form [formGroup]="formGroup" (submit)="onSubmit()">
+    <label>Nom d'utilisateur</label>
+    <input formControlName="username">
+    <label>Adresse e-mail</label>
+    <input formControlName="email">
+    <label>Mot de passe</label>
+    <input formControlName="password">
+    <button type="submit">S'inscrire</button>
+</form>
