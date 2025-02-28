@@ -35,7 +35,7 @@ public class JWTService {
                 .issuer(jwtIssuer)
                 .issuedAt(now)
                 .subject(user.getUsername())
-                .claim("user_id", user.getId())
+                .claim("userId", user.getId())
                 .expiresAt(now.plus(jwtExpiration, ChronoUnit.MILLIS))
                 .build();
         JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters
@@ -45,7 +45,7 @@ public class JWTService {
 
     public Long getUserId(Authentication authentication) {
         Jwt jwt = (Jwt) authentication.getPrincipal();
-        Long userIdLong = jwt.getClaim("user_id");
+        Long userIdLong = jwt.getClaim("userId");
         return Long.valueOf(userIdLong);
     }
 

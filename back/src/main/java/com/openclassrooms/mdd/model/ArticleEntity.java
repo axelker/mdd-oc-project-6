@@ -22,9 +22,9 @@ public class ArticleEntity extends Auditable {
     @Column(length = 2000, nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private Long owner_id;
+    @Column(name = "owner_id",nullable = false)
+    private Long ownerId;
 
-    @Column(nullable = false)
-    private Long theme_id;
+    @Column(name = "theme_id", nullable = false)
+    private Long themeId;
 }

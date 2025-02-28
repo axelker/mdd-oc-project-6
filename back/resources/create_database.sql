@@ -60,3 +60,12 @@ CREATE TABLE comments (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
 );
+
+
+INSERT INTO users (email, name, password) 
+VALUES ('test@test.com', 'Test', '$2a$10$Cugtb5QEITQsbHMuuBWKqecku/5hup5afBWrVqJdU6nN9Ov/wNYy2');
+
+INSERT INTO themes (name, description) 
+VALUES 
+    ('Java', 'Discussion and resources about Java programming language'),
+    ('Web Development', 'All about frontend and backend web development');
