@@ -1,12 +1,10 @@
 package com.openclassrooms.mdd.service.query;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mdd.dto.response.ThemeResponse;
-import com.openclassrooms.mdd.dto.response.ThemesResponse;
 import com.openclassrooms.mdd.mapper.ThemeMapper;
 import com.openclassrooms.mdd.repository.ThemeRepository;
 
@@ -20,11 +18,10 @@ public class ThemeQueryService {
         this.themeMapper = themeMapper;
     }
 
-    public ThemesResponse findAll() {
-       List<ThemeResponse> themes = themeRepository.findAll().stream()
+    public List<ThemeResponse> findAll() {
+       return themeRepository.findAll().stream()
                 .map(themeMapper::toDto)
-                .collect(Collectors.toList());
-        return ThemesResponse.builder().themes(themes).build();
+                .toList();
     }
     
 }

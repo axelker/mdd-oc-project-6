@@ -28,13 +28,13 @@ public class SubscriptionCommandService {
     }
 
     public void subscribe(Long themeId, Long userId) {
-         UserEntity user = userRepository.findById(userId)
+        UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id: " + userId));
 
         ThemeEntity theme = themeRepository.findById(themeId)
                 .orElseThrow(() -> new NoSuchElementException("Theme not found with id: " + themeId));
 
-        boolean alreadySubscribed = subscriptionRepository.existsByUserIdAndThemeId(userId, themeId);
+        boolean alreadySubscribed = subscriptionRepository.findByUserIdAndThemeId(userId, themeId).isPresent();
         if (alreadySubscribed) {
             throw new IllegalStateException("User is already subscribed to this theme.");
         }
@@ -47,14 +47,14 @@ public class SubscriptionCommandService {
         subscriptionRepository.save(sub);
     }
 
-    public void unSubscribe(Long subscriptionId, Long userId) {
-        SubscriptionEntity sub = subscriptionRepository.findById(subscriptionId)
-                .orElseThrow(() -> new NoSuchElementException("Subscription not found with id: " + subscriptionId));
+    public void unSubscribe(Long themeId, Long userId) {
+        SubscriptionEntity sub = subscriptionRepository.findByUserIdAndThemeId(userId,themeId)
+                .orElseThrow(() -> new NoSuchElementException("Subscription not found with id"));
 
         if (!sub.getUser().getId().equals(userId)) {
             throw new UnauthorizedActionException("You are not authorized to delete this subscription.");
         }
 
-        subscriptionRepository.deleteById(subscriptionId);
+        subscriptionRepository.deleteById(sub.getId());
     }
 }
