@@ -6,12 +6,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { TopBarComponent } from "../top-bar/top-bar.component";
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule, TopBarComponent],
+  imports: [ReactiveFormsModule],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss'
 })
@@ -19,7 +18,7 @@ export class LoginFormComponent {
  formGroup!: FormGroup;
 
   constructor(private fb: FormBuilder) {
-    this.fb.group({
+    this.formGroup = this.fb.group({
       username: new FormControl('', [Validators.required]),
       password: new FormControl('', [
         Validators.required,
@@ -28,6 +27,6 @@ export class LoginFormComponent {
   }
 
   onSubmit() : void {
-
+    console.log(this.formGroup.getRawValue())
   }
 }
