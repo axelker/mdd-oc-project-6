@@ -9,9 +9,10 @@ import {
 } from '@angular/forms';
 import { ControlErrorService } from '../../../../shared/services/control-error.service';
 import { AuthService } from '../../../../core/services/auth.service';
-import { AuthRequest } from '../../../../core/interfaces/auth-request';
+import { RegisterRequest } from '../../../../core/interfaces/register-request';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register-form',
@@ -74,10 +75,12 @@ export class RegisterFormComponent {
     );
   }
   onSubmit(): void {
-    const authRequest: AuthRequest = this.formGroup.getRawValue();
-    this.authService.register(authRequest).subscribe({
+    const request: RegisterRequest = this.formGroup.getRawValue();
+    this.authService.register(request).subscribe({
       next: () => this.router.navigate(['/auth/login']),
-      error: (err:Error) => (this.toastr.error(err.message)),
+      error: (err:HttpErrorResponse) =>  {
+        this.toastr.error(err.error.message);
+      }
     });
   }
 }

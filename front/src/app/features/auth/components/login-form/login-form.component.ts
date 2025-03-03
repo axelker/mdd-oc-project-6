@@ -8,12 +8,13 @@ import {
 } from '@angular/forms';
 import { ControlErrorService } from '../../../../shared/services/control-error.service';
 import { NgIf } from '@angular/common';
-import { AuthRequest } from '../../../../core/interfaces/auth-request';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../../core/services/auth.service';
 import { SessionService } from '../../../../core/services/session.service';
 import { AuthResponse } from '../../../../core/interfaces/auth-response';
+import { LoginRequest } from '../../../../core/interfaces/login-request';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-form',
@@ -34,35 +35,37 @@ export class LoginFormComponent {
       private sessionService: SessionService
     ) {
     this.formGroup = this.fb.group({
-      username: new FormControl('', [Validators.required]),
+      identifier: new FormControl('', [Validators.required]),
       password: new FormControl('', [
         Validators.required,
       ]),
     });
   }
-  get username() {
-    return this.formGroup.get('username');
+  get identifier() {
+    return this.formGroup.get('identifier');
   }
 
   get password() {
     return this.formGroup.get('password');
   }
 
-  get usernameError() {
-    return this.controlErrorService.buildErrorMessage("Nom d'utilisateur",this.username);
+  get identifierError() {
+    return this.controlErrorService.buildErrorMessage("Nom d'utilisateur",this.identifier);
   }
 
   get passwordError() {
     return this.controlErrorService.buildErrorMessage("Mot de passe",this.password);
   }
   onSubmit(): void {
-      const authRequest: AuthRequest = this.formGroup.getRawValue();
-      this.authService.login(authRequest).subscribe({
+      const request: LoginRequest = this.formGroup.getRawValue();
+      this.authService.login(request).subscribe({
         next: (res: AuthResponse) => {
           this.sessionService.logUser(res.token);
           this.router.navigate(['/articles']);
         },
-        error: (err: Error) => this.toastr.error(err.message),
+         error: (err:HttpErrorResponse) =>  {
+            this.toastr.error(err.error.message);
+        }
       });
   }
 }
