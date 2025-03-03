@@ -9,8 +9,8 @@ import lombok.Getter;
 @Builder
 public class UserRequest {
 
-    @NotNull(message = "Name is required.")
-    private String name;
+    @NotNull(message = "Username is required.")
+    private String username;
 
     @NotNull(message = "Email is required.")
     @Email
