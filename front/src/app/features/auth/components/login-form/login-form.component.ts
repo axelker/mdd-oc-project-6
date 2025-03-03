@@ -8,6 +8,12 @@ import {
 } from '@angular/forms';
 import { ControlErrorService } from '../../../../shared/services/control-error.service';
 import { NgIf } from '@angular/common';
+import { AuthRequest } from '../../../../core/interfaces/auth-request';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../../../core/services/auth.service';
+import { SessionService } from '../../../../core/services/session.service';
+import { AuthResponse } from '../../../../core/interfaces/auth-response';
 
 @Component({
   selector: 'app-login-form',
@@ -19,7 +25,14 @@ import { NgIf } from '@angular/common';
 export class LoginFormComponent {
  formGroup!: FormGroup;
 
-  constructor(private fb: FormBuilder,public controlErrorService: ControlErrorService) {
+    constructor(
+      private fb: FormBuilder,
+      private controlErrorService: ControlErrorService,
+      private authService: AuthService,
+      private router: Router,
+      private toastr: ToastrService,
+      private sessionService: SessionService
+    ) {
     this.formGroup = this.fb.group({
       username: new FormControl('', [Validators.required]),
       password: new FormControl('', [
@@ -42,7 +55,14 @@ export class LoginFormComponent {
   get passwordError() {
     return this.controlErrorService.buildErrorMessage("Mot de passe",this.password);
   }
-  onSubmit() : void {
-    console.log(this.formGroup.getRawValue())
+  onSubmit(): void {
+      const authRequest: AuthRequest = this.formGroup.getRawValue();
+      this.authService.login(authRequest).subscribe({
+        next: (res: AuthResponse) => {
+          this.sessionService.logUser(res.token);
+          this.router.navigate(['/articles']);
+        },
+        error: (err: Error) => this.toastr.error(err.message),
+      });
   }
 }

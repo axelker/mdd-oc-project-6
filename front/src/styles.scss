@@ -41,6 +41,10 @@ input {
 
 }
 
+.main-button:disabled {
+    opacity: 0.7;
+}
+
 
 .secondary-button {
     border: 1px solid #000000;
@@ -55,4 +59,8 @@ input {
 .secondary-button:hover {
     color: white;
     background-color: var(--color-primary);
+}
+
+.secondary-button:disabled {
+    opacity: 0.7;
 }
