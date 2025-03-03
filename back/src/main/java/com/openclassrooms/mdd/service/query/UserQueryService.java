@@ -1,6 +1,7 @@
 package com.openclassrooms.mdd.service.query;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,8 +31,13 @@ public class UserQueryService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+        Optional<UserEntity> user;
+        if (username.contains("@")) {
+            user = userRepository.findByEmail(username);
+        } else {
+            user = userRepository.findByUsername(username);
+        }
+        return user.orElseThrow(() -> new UsernameNotFoundException("User not found."));
     }
 
 }

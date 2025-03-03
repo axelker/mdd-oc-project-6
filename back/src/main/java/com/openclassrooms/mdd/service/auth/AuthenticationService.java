@@ -1,7 +1,5 @@
 package com.openclassrooms.mdd.service.auth;
 
-import java.util.NoSuchElementException;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,11 +34,14 @@ public class AuthenticationService {
 
     public AuthResponse register(AuthRegisterRequest request) throws Exception {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new UserAlreadyExistsException("User already exist.");
+            throw new UserAlreadyExistsException("User already exist with the same email.");
+        }
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new UserAlreadyExistsException("User already exist with the same username.");
         }
 
         UserEntity user = UserEntity.builder()
-                .name(request.getName())
+                .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
@@ -52,14 +53,12 @@ public class AuthenticationService {
 
     public AuthResponse authenticate(AuthLoginRequest request) {
         try {
-            authenticationManager.authenticate(
+            var test = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),
+                            request.getIdentifier(),
                             request.getPassword()));
 
-            UserEntity user = userRepository.findByEmail(request.getEmail())
-                    .orElseThrow(() -> new NoSuchElementException("User not found after authentication"));
-
+            UserEntity user = (UserEntity) test.getPrincipal();
             String token = jwtService.generateToken(user);
             return AuthResponse.builder().token(token).build();
 

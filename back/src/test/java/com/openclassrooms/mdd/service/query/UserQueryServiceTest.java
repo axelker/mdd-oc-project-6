@@ -37,13 +37,13 @@ public class UserQueryServiceTest {
         UserEntity userEntity = UserEntity.builder()
                 .id(1L)
                 .email("test@test.fr")
-                .name("test")
+                .username("test")
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .password("test-secret")
                 .build();
 
-        UserResponse userResponse = UserResponse.builder().id(1L).email("test@test.fr").name("test").build();
+        UserResponse userResponse = UserResponse.builder().id(1L).email("test@test.fr").username("test").build();
         when(userRepository.findById(1L))
                 .thenReturn(Optional.of(userEntity));
         when(userMapper.toDto(userEntity)).thenReturn(userResponse);
@@ -52,7 +52,7 @@ public class UserQueryServiceTest {
         assertNotNull(result);
         assertEquals(userResponse.getId(), result.getId());
         assertEquals(userResponse.getEmail(), result.getEmail());
-        assertEquals(userResponse.getName(), result.getName());
+        assertEquals(userResponse.getUsername(), result.getUsername());
         verify(userMapper, times(1)).toDto(userEntity);
 
     }
