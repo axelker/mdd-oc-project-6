@@ -1,0 +1,7 @@
+<div>
+    <span>{{article.name}}</span>
+    <span>{{article.createdAt}}</span>
+    <span>{{ (author | async)?.username || ""}}</span>
+    <span>{{ (theme | async)?.name || ""}}</span>
+    <span>{{article.description}}</span>
+</div>
