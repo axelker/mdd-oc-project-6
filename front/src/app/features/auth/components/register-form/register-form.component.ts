@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import {
   FormBuilder,
@@ -6,18 +7,19 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ControlErrorService } from '../../../../shared/services/control-error.service';
 
 @Component({
   selector: 'app-register-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,NgIf],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.scss',
 })
 export class RegisterFormComponent {
   formGroup!: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,public controlErrorService: ControlErrorService) {
     this.formGroup = this.fb.group({
       username: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -31,6 +33,27 @@ export class RegisterFormComponent {
     });
   }
 
+  get username() {
+    return this.formGroup.get('username');
+  }
+  get email() {
+    return this.formGroup.get('email');
+  }
+  get password() {
+    return this.formGroup.get('password');
+  }
+
+  get usernameError() {
+    return this.controlErrorService.buildErrorMessage("Nom d'utilisateur",this.username);
+  }
+
+  get emailError() {
+    return this.controlErrorService.buildErrorMessage("Adresse e-mail",this.email);
+  }
+
+  get passwordError() {
+    return this.controlErrorService.buildErrorMessage("Mot de passe",this.password);
+  }
   onSubmit() : void {
     console.log(this.formGroup.getRawValue())
   }
