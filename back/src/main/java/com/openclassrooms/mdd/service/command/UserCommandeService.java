@@ -26,7 +26,7 @@ public class UserCommandeService {
         
         UserEntity userToSave = user.toBuilder()
                 .email(request.getEmail())
-                .name(request.getName())
+                .username(request.getUsername())
                 .build();
 
         return userMapper.toDto(userRepository.save(userToSave));
