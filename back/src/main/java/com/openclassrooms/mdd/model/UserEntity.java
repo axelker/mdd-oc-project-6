@@ -25,8 +25,8 @@ public class UserEntity extends Auditable implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(nullable = false,unique = true)
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -38,7 +38,7 @@ public class UserEntity extends Auditable implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.username;
     }
 
 }

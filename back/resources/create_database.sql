@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
-    name VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
@@ -62,7 +62,7 @@ CREATE TABLE comments (
 );
 
 
-INSERT INTO users (email, name, password) 
+INSERT INTO users (email, username, password) 
 VALUES ('test@test.com', 'Test', '$2a$10$Cugtb5QEITQsbHMuuBWKqecku/5hup5afBWrVqJdU6nN9Ov/wNYy2');
 
 INSERT INTO themes (name, description) 

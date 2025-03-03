@@ -26,7 +26,7 @@ public class UserMapperTest {
         UserEntity userEntity = UserEntity.builder()
                 .id(1L)
                 .email("test@test.fr")
-                .name("test")
+                .username("test")
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .password("test-secret")
@@ -36,7 +36,7 @@ public class UserMapperTest {
 
         assertThat(userResponse).isNotNull();
         assertThat(userResponse.getId()).isEqualTo(userEntity.getId());
-        assertThat(userResponse.getName()).isEqualTo(userEntity.getName());
+        assertThat(userResponse.getUsername()).isEqualTo(userEntity.getUsername());
         assertThat(userResponse.getEmail()).isEqualTo(userEntity.getEmail());
     }
 
@@ -44,14 +44,14 @@ public class UserMapperTest {
     void shouldMapAuthRegisterRequestToUserEntity() {
         AuthRegisterRequest request = AuthRegisterRequest.builder()
                 .email("test@test.fr")
-                .name("test")
+                .username("test")
                 .password("test-secret")
                 .build();
 
         UserEntity userEntity = userMapper.authRegisterToEntity(request);
 
         assertThat(userEntity).isNotNull();
-        assertThat(userEntity.getName()).isEqualTo(request.getName());
+        assertThat(userEntity.getUsername()).isEqualTo(request.getUsername());
         assertThat(userEntity.getEmail()).isEqualTo(request.getEmail());
         assertThat(userEntity.getPassword()).isEqualTo(request.getPassword());
     }
