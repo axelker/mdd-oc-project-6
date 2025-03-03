@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthResponse } from '../interfaces/auth-response';
 import { RegisterRequest } from '../interfaces/register-request';
-import { User } from '../interfaces/user';
 import { LoginRequest } from '../interfaces/login-request';
+import { UserInfo } from '../interfaces/user-info';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +22,11 @@ export class AuthService {
     return this.http.post<void>(`${this.basePath}/register`,request);
   }
 
-  public getUser(): Observable<User> {
-   return this.http.get<User>(`${this.basePath}/me`);
+  public getUserInfo(): Observable<UserInfo> {
+   return this.http.get<UserInfo>(`${this.basePath}/me`);
   }
 
-  public updateUser(user: User):Observable<User> {
-    return this.http.put<User>(`${this.basePath}/me`,user);
+  public updateUserInfo(user: UserInfo):Observable<UserInfo> {
+    return this.http.put<UserInfo>(`${this.basePath}/me`,user);
   }
 }
