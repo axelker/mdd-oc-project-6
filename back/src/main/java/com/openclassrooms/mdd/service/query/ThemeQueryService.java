@@ -1,6 +1,7 @@
 package com.openclassrooms.mdd.service.query;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,11 @@ public class ThemeQueryService {
         this.themeMapper = themeMapper;
     }
 
+    public ThemeResponse findById(Long id) {
+        return themeRepository.findById(id)
+                .map(themeMapper::toDto)
+                .orElseThrow(() -> new NoSuchElementException("Theme not found with id: " + id));
+    }
     public List<ThemeResponse> findAll() {
        return themeRepository.findAll().stream()
                 .map(themeMapper::toDto)
