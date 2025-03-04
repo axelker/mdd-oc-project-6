@@ -24,12 +24,16 @@ html,body
 h1 {
     font-size: 24px;
 }
-input {
-    width: 250;
-    height: 50px;
+input,select,textarea {
     border: solid 1px #000000;
     border-radius: 8px;
 }
+
+input,select {
+    width: 250;
+    height: 50px;
+}
+
 .main-button {
     color: white;
     font-weight: 700;
