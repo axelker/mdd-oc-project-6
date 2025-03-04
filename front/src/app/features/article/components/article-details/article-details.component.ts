@@ -4,7 +4,7 @@ import { ThemeService } from '../../../theme/services/theme.service';
 import { User } from '../../../user/services/interfaces/user';
 import { UserService } from '../../../user/services/user.service';
 import { Article } from '../../interfaces/article';
-import { Theme } from '../../../theme/services/interfaces/theme';
+import { Theme } from '../../../theme/interfaces/theme';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
