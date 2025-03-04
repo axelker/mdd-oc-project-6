@@ -5,8 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CommentResponse {
+public class SummaryResponse {
     private Long id;
-    private SummaryResponse owner;
-    private String message;
+    private String name;
 }
