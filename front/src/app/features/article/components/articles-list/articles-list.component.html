@@ -1,7 +1,21 @@
-<div class="grid col-2">
-    <div *ngFor="let article of articles">
-        <span>{{article.name}}</span>
-        <span>{{article.description}}</span>
-     </div>
- </div>
+@if (articles$ | async; as articles) {
+   
+    <div class="grid col-2">
+        @for (article of articles; track article.id) {
+            <app-article-card [article]="article"></app-article-card>
+        } @empty {
+            <div class="flex justify-center">
+                <span>Aucun article trouvé</span>
+            </div>
+        }
+    </div>
+}
+
+@else {
+    <div class="flex justify-center">
+        <span>Chargement des articles...</span>
+    </div>
+}
+
+
  

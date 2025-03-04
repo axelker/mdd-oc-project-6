@@ -1,6 +1,8 @@
 <div>
     <span>{{article.name}}</span>
-    <span>{{article.createdAt}}</span>
-    <span>{{ (author | async)?.username || ""}}</span>
+    <div class="flex">
+        <span>{{article.createdAt}}</span>
+        <span>{{ (author$ | async)?.username || "Autheur inconnu"}}</span>
+    </div>
     <span>{{article.description}}</span>
 </div>
