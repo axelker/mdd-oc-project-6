@@ -1,8 +1,9 @@
 import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { jwtInterceptor } from './interceptors/jwt-interceptor.service';
 
 export function provideCore(): EnvironmentProviders {
   return makeEnvironmentProviders([
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptors([jwtInterceptor]))
   ]);
 }

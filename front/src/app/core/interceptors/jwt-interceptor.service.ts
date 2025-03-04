@@ -1,23 +1,18 @@
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { SessionService } from '../services/session.service';
-import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class JwtInterceptorService implements HttpInterceptor {
-  
-  constructor(private sessionService: SessionService) { }
-
-  public intercept(request: HttpRequest<any>, next: HttpHandler) {
-    const token = this.sessionService.getToken();
+export function jwtInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+  const sessionService = inject(SessionService);  
+  const token = sessionService.getToken();
     if (token) {
-      request = request.clone({
+      req = req.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`,
         },
       });
     }
-    return next.handle(request);
+    return next(req);
   }
-}
+
