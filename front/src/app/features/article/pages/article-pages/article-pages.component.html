@@ -1,2 +1,5 @@
-<button class="main-button" [routerLink]="['/articles/create']"> Créer un article</button>
-<app-articles-list></app-articles-list>
+<div class="flex">
+    <button class="main-button" [routerLink]="['/articles/create']"> Créer un article</button>
+    <button (click)="filter()">Trier par <ng-icon class="text-[16] font-bold" [name]="isDescending ? 'heroArrowDown' : 'heroArrowUp'"></ng-icon></button>
+</div>
+<app-articles-list [isDescending]="isDescending"></app-articles-list>

@@ -6,15 +6,14 @@ import { routes } from './app.routes';
 import { provideToastr } from 'ngx-toastr';
 import { provideCore } from './core/core.providers';
 import { provideIcons } from '@ng-icons/core';
-import { heroArrowLeft } from '@ng-icons/heroicons/outline';
-
+import { heroArrowLeft,heroArrowDown,heroArrowUp } from '@ng-icons/heroicons/outline';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideToastr(),
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideCore(),
-    provideIcons({ heroArrowLeft }),
+    provideIcons({ heroArrowLeft,heroArrowDown,heroArrowUp }),
     provideRouter(routes),
   ],
 };

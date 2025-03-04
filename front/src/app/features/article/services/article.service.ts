@@ -13,8 +13,8 @@ export class ArticleService {
   private basePath: string = "/api/articles";
   constructor(private http: HttpClient) { }
 
-  public getAllArticles(): Observable<Article[]> {
-    return this.http.get<Article[]>(`${this.basePath}`);
+  public getAllArticles(desc:boolean): Observable<Article[]> {
+    return this.http.get<Article[]>(`${this.basePath}?desc=${desc}`);
   }
 
   public getArticleById(id:number) : Observable<Article> {
