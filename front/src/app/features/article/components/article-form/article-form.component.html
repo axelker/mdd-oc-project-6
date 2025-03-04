@@ -14,7 +14,7 @@
                 {{ themeError }}
             </span>
         }
-        <input formControlName="title" id="title" type="title"  placeholder="Titre de l'article"
+        <input formControlName="title" id="title" type="text"  placeholder="Titre de l'article"
             class="w-full px-4 py-2 mb-4">
         @if (title?.invalid && title?.touched) {
             <span class="text-red-600 text-sm block">
@@ -22,7 +22,7 @@
             </span>
         }
 
-        <textarea maxlength="2000" formControlName="content" id="content" type="content"  placeholder="Contenu de l'article"
+        <textarea maxlength="2000" formControlName="content" id="content" type="text" placeholder="Contenu de l'article"
             class="w-full px-4 py-2 mb-4 h-[212px]">
         </textarea>
         @if (content?.invalid && content?.touched) {

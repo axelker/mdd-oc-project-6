@@ -1,1 +1,12 @@
-<p>article-details-page works!</p>
+<div class="px-5">
+    <div class="flex gap-5">
+        <app-page-header></app-page-header>
+        <div class="pr-8">
+            <app-article-details [articleId]="articleId"></app-article-details>
+            <hr class="my-8">
+        </div>
+    </div>
+    <app-comment-list [articleId]="articleId"></app-comment-list>
+    <app-comment-form [articleId]="articleId"></app-comment-form>
+</div>
+
