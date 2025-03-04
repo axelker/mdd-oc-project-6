@@ -1,7 +1,7 @@
 <div>
     <span>{{article.name}}</span>
     <span>{{article.createdAt}}</span>
-    <span>{{ (author | async)?.username || ""}}</span>
-    <span>{{ (theme | async)?.name || ""}}</span>
+    <span>{{article.owner.name || "Inconnu"}}</span>
+    <span>{{article.theme.name || "Inconnu"}}</span>
     <span>{{article.description}}</span>
 </div>

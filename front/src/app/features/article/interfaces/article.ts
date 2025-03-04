@@ -1,8 +1,10 @@
+import { SummaryResponse } from "../../../shared/interfaces/SummaryResponse";
+
 export interface Article {
     id:number;
     name:string
     description: string;
-    ownerId: number;
-    themeId: number;
+    owner: SummaryResponse;
+    theme: SummaryResponse;
     createdAt: Date;
 }

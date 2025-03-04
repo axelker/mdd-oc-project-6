@@ -3,12 +3,13 @@ import { Article } from '../../interfaces/article';
 import { AsyncPipe } from '@angular/common';
 import { ArticleCardComponent } from '../article-card/article-card.component';
 import { ArticleService } from '../../services/article.service';
-import { EMPTY, Observable, of } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-articles-list',
   standalone: true,
-  imports: [ArticleCardComponent, AsyncPipe],
+  imports: [ArticleCardComponent, AsyncPipe,RouterLink],
   templateUrl: './articles-list.component.html',
   styleUrl: './articles-list.component.scss'
 })
