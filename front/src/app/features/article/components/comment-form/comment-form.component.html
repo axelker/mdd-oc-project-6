@@ -1,0 +1,13 @@
+
+<div class="flex justify-center">
+    <form [formGroup]="formGroup" (submit)="onSubmit()" class="w-full max-w-sm">
+        <div class="flex flex-row" >
+            <input formControlName="message" id="message" type="text" placeholder="Écrivez ici votre commentaire">
+            <button class="text-[#7763C5]" type="submit" [disabled]="formGroup.invalid">
+                <ng-icon class="text-[39px] font-bold" name="bootstrapSend"></ng-icon>
+            </button>
+        </div>
+       
+    </form>
+</div>
+

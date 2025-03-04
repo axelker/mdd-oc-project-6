@@ -1,0 +1,5 @@
+
+@for (comment of comments$ | async; track comment.id) {
+    <app-comment [comment]="comment"></app-comment>
+}
+
