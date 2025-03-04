@@ -9,11 +9,12 @@ export const routes: Routes = [
         component:ArticlePagesComponent
     },
     {
+        path:'create',
+        component: ArticleCreationPageComponent
+    },
+    {
         path:':id',
         component: ArticleDetailsPageComponent,
     },
-    {
-        path:'create',
-        component: ArticleCreationPageComponent
-    }
+
 ];
