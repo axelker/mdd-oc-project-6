@@ -14,7 +14,17 @@ export class ThemeService {
     return this.http.get<Theme>(`${this.basePath}/${id}`);
   }
 
-  public getAllTheme() : Observable<Theme[]> {
-    return this.http.get<Theme[]>(`${this.basePath}`);
+  public getAllTheme(subscribed: boolean | null = null) : Observable<Theme[]> {
+    console.log(subscribed)
+    const subParam = subscribed !== null ? `subscribed=${subscribed}` : '';
+    return this.http.get<Theme[]>(`${this.basePath}?${subParam}`);
+  }
+
+  public subscribe(id:number): Observable<void> {
+    return this.http.post<void>(`${this.basePath}/${id}/subscribe`,{});
+  }
+
+  public unsubscribe(id:number): Observable<void> {
+    return this.http.delete<void>(`${this.basePath}/${id}/unsubscribe`);
   }
 }
