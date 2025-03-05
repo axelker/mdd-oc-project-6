@@ -1,0 +1,4 @@
+<div class="flex flex-col">
+    <app-comment-list class="px-4 md:pr-[4rem]" [comments]="comments()"></app-comment-list>
+    <app-comment-form class="pt-4 pb-3 md:pb-8" [articleId]="articleId" (commentAdded)="addComment($event)"></app-comment-form>
+</div>

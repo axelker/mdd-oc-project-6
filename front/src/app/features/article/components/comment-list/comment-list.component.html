@@ -1,5 +1,6 @@
-
-@for (comment of comments$ | async; track comment.id) {
-    <app-comment [comment]="comment"></app-comment>
-}
+<div class="flex flex-col gap-y-4">
+    @for (comment of comments; track comment.id) {
+        <app-comment [comment]="comment"></app-comment>
+    }
+</div>
 
