@@ -15,7 +15,6 @@ export class ThemeService {
   }
 
   public getAllTheme(subscribed: boolean | null = null) : Observable<Theme[]> {
-    console.log(subscribed)
     const subParam = subscribed !== null ? `subscribed=${subscribed}` : '';
     return this.http.get<Theme[]>(`${this.basePath}?${subParam}`);
   }
