@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { ArticleService } from '../../services/article.service';
 import { FormGroup, FormBuilder, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +14,7 @@ import { ArticleComment } from '../../interfaces/article-comment';
 })
 export class CommentFormComponent {
   @Input({required:true}) articleId!:number;
+  @Output() commentAdded = new EventEmitter<ArticleComment>();
   formGroup!: FormGroup;
 
   constructor(
@@ -29,7 +30,8 @@ export class CommentFormComponent {
     const request: CommentRequest = this.formGroup.getRawValue();
     this.articleService.addComment(this.articleId,request).subscribe({
       next: (comment:ArticleComment) => {
-        console.log("TODO NEED TO RELOAD COMMENT LIST")
+        this.commentAdded.emit(comment);
+        this.formGroup.reset();
     }
     });
   }
