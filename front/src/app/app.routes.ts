@@ -20,6 +20,11 @@ export const routes: Routes = [
         canActivate:[canActivateAuth]
     },
     {
+        path:'users',
+        loadChildren: () => import('./features/user/user.routes').then((v) => v.routes),
+        canActivate:[canActivateAuth]
+    },
+    {
         path:'auth',
         loadChildren: () => import('./features/auth/auth.routes').then((v) => v.routes),
         canActivate:[canActivateUnAuth]

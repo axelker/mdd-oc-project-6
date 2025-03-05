@@ -5,6 +5,7 @@ import { AuthResponse } from '../interfaces/auth-response';
 import { RegisterRequest } from '../interfaces/register-request';
 import { LoginRequest } from '../interfaces/login-request';
 import { UserInfo } from '../interfaces/user-info';
+import { UserRequest } from '../interfaces/user-request';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class AuthService {
    return this.http.get<UserInfo>(`${this.basePath}/me`);
   }
 
-  public updateUserInfo(user: UserInfo):Observable<UserInfo> {
+  public updateUserInfo(user: UserRequest):Observable<UserInfo> {
     return this.http.put<UserInfo>(`${this.basePath}/me`,user);
   }
 }

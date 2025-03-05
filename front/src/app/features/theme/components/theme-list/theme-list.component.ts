@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { ThemeService } from '../../services/theme.service';
 import { Theme } from '../../interfaces/theme';
 import { ThemeCardComponent } from "../theme-card/theme-card.component";
@@ -11,6 +11,7 @@ import { ThemeCardComponent } from "../theme-card/theme-card.component";
   styleUrl: './theme-list.component.scss'
 })
 export class ThemeListComponent implements OnInit {
+  @Input() subscribed : boolean | null = null;
   themes = signal<Theme[]>([]);
   
 
@@ -21,31 +22,24 @@ export class ThemeListComponent implements OnInit {
   }
 
   initThemes(): void {
-    this.themeService.getAllTheme().subscribe((themes) => {
+    this.themeService.getAllTheme(this.subscribed).subscribe((themes) => {
       this.themes.set(themes);
     });
   }
 
-  updateThemesSubById(id:number,sub:boolean){
-    this.themes.update((themes) => {
-      return themes.map((theme) => {
-        if(theme.id === id){
-          return {...theme,subscribed:sub};
-        }
-        return theme;
-      });
-    });
+  updateThemesSubById(){
+    this.initThemes()
   }
 
   subscribe(id:number){
     this.themeService.subscribe(id).subscribe(() => {
-      this.updateThemesSubById(id,true);
+      this.updateThemesSubById();
     });
   }
 
   unsubscribe(id:number){ 
     this.themeService.unsubscribe(id).subscribe(() => {
-      this.updateThemesSubById(id,false);
+      this.updateThemesSubById();
     });
   }
 }
