@@ -1,0 +1,16 @@
+<div class="px-2 md:px-5">
+    <div class="flex flex-col gap-5 md:flex-row">
+        <app-page-header></app-page-header>
+        <div class="flex-1 md:pr-8">
+            <div class="pl-5 pr-5">
+                <app-article-details [articleId]="articleId"></app-article-details>
+                <hr class="my-8">
+                <span class="text-xl">Commentaires</span>
+            </div>
+            <div class="mt-8 flex flex-col gap-8 md:px-7">
+                <app-comments-section [articleId]="articleId"></app-comments-section>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -11,7 +11,7 @@ public class ArticleResponse {
     private Long id;
     private String name;
     private String description;
-    private Long ownerId;
-    private Long themeId;
+    private SummaryResponse owner;
+    private SummaryResponse theme;
     private LocalDateTime createdAt;
 }

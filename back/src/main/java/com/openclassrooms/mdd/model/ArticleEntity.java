@@ -22,9 +22,11 @@ public class ArticleEntity extends Auditable {
     @Column(length = 2000, nullable = false)
     private String description;
 
-    @Column(name = "owner_id",nullable = false)
-    private Long ownerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private UserEntity owner;
 
-    @Column(name = "theme_id", nullable = false)
-    private Long themeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "theme_id", nullable = false)
+    private ThemeEntity theme;
 }

@@ -15,7 +15,7 @@ public class ArticleRequest {
     private String name;
 
     @NotBlank
-    @Size(max = 255, message = "Article name must be at max 2000 characters long.")
+    @Size(max = 2000, message = "Article descritpion must be at max 2000 characters long.")
     private String description;
 
     @NotNull

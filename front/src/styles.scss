@@ -24,21 +24,25 @@ html,body
 h1 {
     font-size: 24px;
 }
-input {
-    width: 250;
-    height: 50px;
+input,select,textarea {
     border: solid 1px #000000;
     border-radius: 8px;
 }
+
+input,select {
+    width: 250;
+    height: 50px;
+}
+hr {
+    border: 1px solid #000000;
+}
+
 .main-button {
     color: white;
     font-weight: 700;
     background-color: var(--color-primary);
     padding: var(--button-padding);
-    width: 128;
-    height: 40;
     border-radius: 8px;
-
 }
 
 .main-button:disabled {

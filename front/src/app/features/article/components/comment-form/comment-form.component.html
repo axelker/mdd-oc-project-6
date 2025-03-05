@@ -1,0 +1,13 @@
+<div class="flex justify-center w-full">
+    <form [formGroup]="formGroup" (submit)="onSubmit()" class="w-full">
+        <div class="relative w-full md:flex gap-6 md:static">
+            <textarea class="pr-12 p-5 w-full resize-none" maxlength="2000" formControlName="message" id="message"
+                placeholder="Écrivez ici votre commentaire">
+            </textarea>
+            <button class="absolute right-4 top-1/2 -translate-y-1/2 text-[#7763C5] 
+            md:static md:translate-y-0 flex items-center justify-center" type="submit" [disabled]="formGroup.invalid">
+                <ng-icon class="text-[39px] font-bold" name="bootstrapSend"></ng-icon>
+            </button>
+        </div>
+    </form>
+</div>

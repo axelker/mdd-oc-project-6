@@ -1,0 +1,8 @@
+@if (comment) {
+    <div class="flex flex-col gap-4 md:flex-row gap-8">
+        <span class="order-last text-right md:order-first">{{comment.owner.name}}</span>
+        <div class="content p-3 order-frist md:order-last">
+            {{comment.message}}
+        </div>
+    </div>
+}

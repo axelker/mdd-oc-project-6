@@ -1,0 +1,25 @@
+@if (articles$ | async; as articles) {
+    @if (articles.length === 0) {
+        <div class="flex justify-center">
+            <span>Aucun article trouvé</span>
+        </div>
+    }
+    @else {
+        <div class="grid grid-cols-1 items-stretch gap-5 md:grid-cols-2 items-stretch">
+            @for (article of articles; track article.id) {
+                <app-article-card class="hover:cursor-pointer" [routerLink]="['/articles/',article.id]"
+                    [article]="article"></app-article-card>
+            } 
+        </div>
+    }
+    
+}
+
+@else {
+    <div class="flex justify-center">
+        <span>Chargement des articles...</span>
+    </div>
+}
+
+
+ 

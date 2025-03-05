@@ -47,6 +47,17 @@ public class ThemeRestController {
         this.jwtService = jwtService;
     }
 
+    @Operation(summary = "Get theme by id", description = "Retrieve the available theme. This endpoint returns the theme find by id.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Theme retrieved successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ThemeResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found - Theme does not exist", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected server issue", content = @Content)
+    })
+    @GetMapping("{id}")
+    public ResponseEntity<ThemeResponse> getThemeById(@PathVariable Long id) {
+        return ResponseEntity.ok(themeQueryService.findById(id));
+    }
+
     @Operation(summary = "Get all themes", description = "Retrieve all available themes. This endpoint returns a list of themes that can be used in the application.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of themes retrieved successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ThemeResponse.class)))),
