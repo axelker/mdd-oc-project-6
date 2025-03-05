@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.openclassrooms.mdd.dto.request.AuthLoginRequest;
-import com.openclassrooms.mdd.dto.request.AuthRegisterRequest;
 import com.openclassrooms.mdd.dto.request.UserRequest;
 import com.openclassrooms.mdd.dto.response.AuthResponse;
 import com.openclassrooms.mdd.dto.response.ErrorResponse;
@@ -94,7 +93,7 @@ public class AuthRestController {
             @ApiResponse(responseCode = "409", description = "Conflict : User already exist with the same email in the system.", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PostMapping("register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody AuthRegisterRequest body) throws Exception {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody UserRequest body) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(body));
     }
 
