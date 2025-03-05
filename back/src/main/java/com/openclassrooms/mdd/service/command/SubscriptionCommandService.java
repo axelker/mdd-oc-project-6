@@ -47,7 +47,7 @@ public class SubscriptionCommandService {
         subscriptionRepository.save(sub);
     }
 
-    public void unSubscribe(Long themeId, Long userId) {
+    public void unsubscribe(Long themeId, Long userId) {
         SubscriptionEntity sub = subscriptionRepository.findByUserIdAndThemeId(userId,themeId)
                 .orElseThrow(() -> new NoSuchElementException("Subscription not found with id"));
 
