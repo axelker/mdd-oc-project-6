@@ -1,0 +1,15 @@
+
+<div class="grid grid-cols-1 items-stretch gap-2 md:grid-cols-2 items-stretch">
+    @for (theme of themes(); track theme.id) {
+        <app-theme-card [theme]="theme" (unsubscribe)="unsubscribe($event)" (subscribe)="subscribe($event)"></app-theme-card>
+    }
+</div>
+
+@if (themes().length === 0) {
+    <div class="flex justify-center">
+        <span>Aucun theme trouvé</span>
+    </div>
+}
+
+
+ 

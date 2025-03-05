@@ -1,0 +1,5 @@
+<div class="card flex flex-col gap-5 h-full w-full">
+    <span class="font-bold">{{theme.name}}</span>
+    <span class="card-description text-sm">{{theme.description}}</span>
+    <button class="main-button mx-auto" (click)="sub(!theme.subscribed)">{{theme.subscribed ? "Se désabonner" : "S'abonner" }}</button>
+</div>
