@@ -20,8 +20,8 @@ public interface CommentMapper {
     @Mapping(target = "article", ignore = true)
     CommentEntity toEntity(CommentRequest message);
 
-    @Mapping(target = "ownerId", source = "user.id")
-    @Mapping(target = "articleId", source = "article.id")
+    @Mapping(target = "owner.id", source = "user.id")
+    @Mapping(target = "owner.name", source = "user.username")
     CommentResponse toDto(CommentEntity comment);
 
 }

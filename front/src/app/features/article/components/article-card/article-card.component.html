@@ -1,0 +1,8 @@
+<div class="card flex flex-col gap-5 h-full w-full">
+    <span class="font-bold">{{article.name}}</span>
+    <div class="w-1/2 flex justify-between text-sm">
+        <span>{{article.createdAt | date:'medium'}}</span>
+        <span>{{ article.owner.name || "Autheur inconnu"}}</span>
+    </div>
+    <span class="description text-sm">{{article.description}}</span>
+</div>

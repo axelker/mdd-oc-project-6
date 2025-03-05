@@ -7,7 +7,6 @@ import lombok.Getter;
 @Builder
 public class CommentResponse {
     private Long id;
-    private Long articleId;
-    private Long ownerId;
+    private SummaryResponse owner;
     private String message;
 }

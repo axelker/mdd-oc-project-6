@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import {
   FormBuilder,
@@ -11,13 +10,11 @@ import { ControlErrorService } from '../../../../shared/services/control-error.s
 import { AuthService } from '../../../../core/services/auth.service';
 import { RegisterRequest } from '../../../../core/interfaces/register-request';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.scss',
 })
@@ -29,7 +26,6 @@ export class RegisterFormComponent {
     private controlErrorService: ControlErrorService,
     private authService: AuthService,
     private router: Router,
-    private toastr: ToastrService
   ) {
     this.formGroup = this.fb.group({
       username: new FormControl('', [Validators.required]),
@@ -77,10 +73,7 @@ export class RegisterFormComponent {
   onSubmit(): void {
     const request: RegisterRequest = this.formGroup.getRawValue();
     this.authService.register(request).subscribe({
-      next: () => this.router.navigate(['/auth/login']),
-      error: (err:HttpErrorResponse) =>  {
-        this.toastr.error(err.error.message);
-      }
+      next: () => this.router.navigate(['/auth/login'])
     });
   }
 }

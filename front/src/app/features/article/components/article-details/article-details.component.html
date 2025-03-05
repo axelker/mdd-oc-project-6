@@ -1,0 +1,13 @@
+<div>
+    @if (article$ | async; as article) {
+        <div class="flex flex-col gap-7">
+            <h1 class="font-semibold">{{article.name}}</h1>
+            <div class="grid grid-cols-2 gap-3 justify-between text-xl md:grid-cols-3">
+                <span>{{article.createdAt | date}}</span>
+                <span>{{article.owner.name || "Inconnu"}}</span>
+                <span>{{article.theme.name || "Inconnu"}}</span>
+            </div>
+            <span class="text-xl">{{article.description}}</span>   
+        </div>  
+    }
+</div>

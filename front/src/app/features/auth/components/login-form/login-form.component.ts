@@ -7,19 +7,16 @@ import {
   Validators,
 } from '@angular/forms';
 import { ControlErrorService } from '../../../../shared/services/control-error.service';
-import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../../core/services/auth.service';
 import { SessionService } from '../../../../core/services/session.service';
 import { AuthResponse } from '../../../../core/interfaces/auth-response';
 import { LoginRequest } from '../../../../core/interfaces/login-request';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule,NgIf],
+  imports: [ReactiveFormsModule],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss'
 })
@@ -31,7 +28,6 @@ export class LoginFormComponent {
       private controlErrorService: ControlErrorService,
       private authService: AuthService,
       private router: Router,
-      private toastr: ToastrService,
       private sessionService: SessionService
     ) {
     this.formGroup = this.fb.group({
@@ -63,9 +59,6 @@ export class LoginFormComponent {
           this.sessionService.logUser(res.token);
           this.router.navigate(['/articles']);
         },
-         error: (err:HttpErrorResponse) =>  {
-            this.toastr.error(err.error.message);
-        }
       });
   }
 }
