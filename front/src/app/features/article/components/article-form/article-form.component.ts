@@ -79,7 +79,6 @@ export class ArticleFormComponent {
   }
 
   onSubmit(): void {
-    console.log(this.formGroup.getRawValue())
     const request: ArticleRequest = {
       themeId: this.theme?.value,
       name: this.title?.value,

@@ -1,51 +1,42 @@
 package com.openclassrooms.mdd.service.auth;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mdd.dto.request.AuthLoginRequest;
-import com.openclassrooms.mdd.dto.request.AuthRegisterRequest;
+import com.openclassrooms.mdd.dto.request.UserRequest;
 import com.openclassrooms.mdd.dto.response.AuthResponse;
-import com.openclassrooms.mdd.exception.user.UserAlreadyExistsException;
+import com.openclassrooms.mdd.dto.response.UserResponse;
 import com.openclassrooms.mdd.model.UserEntity;
 import com.openclassrooms.mdd.repository.UserRepository;
+import com.openclassrooms.mdd.service.command.UserCommandeService;
 
 @Service
 public class AuthenticationService {
-
+    private final UserCommandeService userCommandeService;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationService(UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
+    public AuthenticationService(
+            UserCommandeService userCommandeService,
+            UserRepository userRepository,
             JWTService jwtService,
             AuthenticationManager authenticationManager) {
+        this.userCommandeService = userCommandeService;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
 
-
-    public AuthResponse register(AuthRegisterRequest request) throws Exception {
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new UserAlreadyExistsException("User already exist with the same email.");
-        }
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException("User already exist with the same username.");
-        }
-
-        UserEntity user = UserEntity.builder()
-                .username(request.getUsername())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
-        userRepository.save(user);
+    public AuthResponse register(UserRequest request) throws Exception {
+        UserResponse userResponse = this.userCommandeService.create(request);
+        UserEntity user = userRepository.findById(userResponse.getId())
+            .orElseThrow(() -> new NoSuchElementException("User not found after creation."));
         String token = jwtService.generateToken(user);
 
         return AuthResponse.builder().token(token).build();
