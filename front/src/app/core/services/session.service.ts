@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
   private TOKEN_SESSION_KEY: string = "token";
-  constructor() { }
+  constructor(private router: Router) { }
 
   public getToken() : string {
     return localStorage.getItem(this.TOKEN_SESSION_KEY) ?? '';
@@ -21,5 +22,6 @@ export class SessionService {
 
   public logOutUser():void {
     localStorage.removeItem(this.TOKEN_SESSION_KEY);
+    this.router.navigate(['/auth']);
   }
 }

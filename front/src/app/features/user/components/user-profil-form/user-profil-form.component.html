@@ -1,32 +1,30 @@
-<div class="flex justify-center">
-    <form [formGroup]="formGroup" (submit)="onSubmit()" class="w-full max-w-sm">
-        <input formControlName="username" id="username" type="text"
-            class="w-full px-4 py-2 mb-4">
-        @if (username?.invalid && username?.touched) {
-            <span class="text-red-600 text-sm block">
-                {{ usernameError }}
-            </span>
-        }
-        <input formControlName="email" id="email" type="email"
-            class="w-full px-4 py-2 mb-4">
-        @if (email?.invalid && email?.touched) {
-            <span class="text-red-600 text-sm block">
-                {{ emailError }}
-            </span>
-        }
-        <label for="password" class="block mb-1">
-            Mot de passe
-        </label>
-        <input formControlName="password" id="password" type="password"
-            class="w-full px-4 py-2 mb-4">
-        @if (password?.invalid && password?.touched) {
-            <span class="text-red-600 text-sm block">
-                {{ passwordError }}
-            </span>
-        }
-        <button type="submit" [disabled]="formGroup.invalid" class="main-button block mx-auto mt-4">
-            Sauvegarder
-        </button>
-        
-    </form>
-</div>
+<form [formGroup]="formGroup" (submit)="onSubmit()" class="w-full max-w-sm">
+    <input formControlName="username" id="username" type="text"
+        class="w-full px-4 py-2 mb-4">
+    @if (username?.invalid && username?.touched) {
+        <span class="text-red-600 text-sm block">
+            {{ usernameError }}
+        </span>
+    }
+    <input formControlName="email" id="email" type="email"
+        class="w-full px-4 py-2 mb-4">
+    @if (email?.invalid && email?.touched) {
+        <span class="text-red-600 text-sm block">
+            {{ emailError }}
+        </span>
+    }
+    <label for="password" class="block mb-1">
+        Mot de passe
+    </label>
+    <input formControlName="password" id="password" type="password"
+        class="w-full px-4 py-2 mb-4">
+    @if (password?.invalid && password?.touched) {
+        <span class="text-red-600 text-sm block">
+            {{ passwordError }}
+        </span>
+    }
+    <button type="submit" [disabled]="formGroup.invalid" class="main-button block mx-auto mt-4">
+        Sauvegarder
+    </button>
+    
+</form>

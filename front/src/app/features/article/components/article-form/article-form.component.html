@@ -1,38 +1,36 @@
 
-<div class="flex">
-    <form [formGroup]="formGroup" (submit)="onSubmit()" class="w-full max-w-sm">
-        
-        <select formControlName="theme" id="theme" type="text"
-            class="w-full px-4 py-2 mb-4" [ngClass]="{'text-gray-400': emptyValueSelected()}"            >
-            <option value="" disabled selected>Séléctionner un thème</option>
-            @for (theme of themeOptions;track theme.id) {
-                <option class="text-black" [value]="theme.id">{{ theme.name }}</option>
-            }
-        </select>
-        @if (theme?.invalid && theme?.touched) {
-            <span class="text-red-600 text-sm block">
-                {{ themeError }}
-            </span>
+<form [formGroup]="formGroup" (submit)="onSubmit()" class="w-full max-w-sm">
+    
+    <select formControlName="theme" id="theme" type="text"
+        class="w-full px-4 py-2 mb-4" [ngClass]="{'text-gray-400': emptyValueSelected()}"            >
+        <option value="" disabled selected>Séléctionner un thème</option>
+        @for (theme of themeOptions;track theme.id) {
+            <option class="text-black" [value]="theme.id">{{ theme.name }}</option>
         }
-        <input formControlName="title" id="title" type="text"  placeholder="Titre de l'article"
-            class="w-full px-4 py-2 mb-4">
-        @if (title?.invalid && title?.touched) {
-            <span class="text-red-600 text-sm block">
-                {{ titleError }}
-            </span>
-        }
+    </select>
+    @if (theme?.invalid && theme?.touched) {
+        <span class="text-red-600 text-sm block">
+            {{ themeError }}
+        </span>
+    }
+    <input formControlName="title" id="title" type="text"  placeholder="Titre de l'article"
+        class="w-full px-4 py-2 mb-4">
+    @if (title?.invalid && title?.touched) {
+        <span class="text-red-600 text-sm block">
+            {{ titleError }}
+        </span>
+    }
 
-        <textarea maxlength="2000" formControlName="content" id="content" type="text" placeholder="Contenu de l'article"
-            class="w-full px-4 py-2 mb-4 h-[212px]">
-        </textarea>
-        @if (content?.invalid && content?.touched) {
-            <span class="text-red-600 text-sm block">
-                {{ contentError }}
-            </span>
-        }
-        <button type="submit" [disabled]="formGroup.invalid" class="main-button block mx-auto mt-4">
-            Créer
-        </button>
-    </form>
-</div>
+    <textarea maxlength="2000" formControlName="content" id="content" type="text" placeholder="Contenu de l'article"
+        class="w-full px-4 py-2 mb-4 h-[212px]">
+    </textarea>
+    @if (content?.invalid && content?.touched) {
+        <span class="text-red-600 text-sm block">
+            {{ contentError }}
+        </span>
+    }
+    <button type="submit" [disabled]="formGroup.invalid" class="main-button block mx-auto mt-4">
+        Créer
+    </button>
+</form>
 
