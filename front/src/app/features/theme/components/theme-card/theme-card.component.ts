@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Theme } from '../../interfaces/theme';
 
 @Component({
@@ -10,15 +10,6 @@ import { Theme } from '../../interfaces/theme';
 })
 export class ThemeCardComponent {
   @Input({required:true}) theme!: Theme;
-  @Output() unsubscribe : EventEmitter<number> = new EventEmitter<number>();
-  @Output() subscribe : EventEmitter<number> = new EventEmitter<number>();
   constructor() {}
 
-  sub(sub:boolean) {
-    if(sub){
-      this.subscribe.emit(this.theme.id);
-      return;
-    }
-    this.unsubscribe.emit(this.theme.id);
-  }
 }

@@ -2,6 +2,7 @@ import { Component, Input, OnInit, signal } from '@angular/core';
 import { ThemeService } from '../../services/theme.service';
 import { Theme } from '../../interfaces/theme';
 import { ThemeCardComponent } from "../theme-card/theme-card.component";
+import { searchThemeMode } from '../../types/search-theme-mode.type';
 
 @Component({
   selector: 'app-theme-list',
@@ -11,7 +12,7 @@ import { ThemeCardComponent } from "../theme-card/theme-card.component";
   styleUrl: './theme-list.component.scss'
 })
 export class ThemeListComponent implements OnInit {
-  @Input() subscribed : boolean | null = null;
+  @Input() mode : searchThemeMode = 'all';
   themes = signal<Theme[]>([]);
   
 
@@ -22,7 +23,7 @@ export class ThemeListComponent implements OnInit {
   }
 
   initThemes(): void {
-    this.themeService.getAllTheme(this.subscribed).subscribe((themes) => {
+    this.themeService.getAllTheme(this.mode).subscribe((themes) => {
       this.themes.set(themes);
     });
   }
@@ -42,4 +43,13 @@ export class ThemeListComponent implements OnInit {
       this.updateThemesSubById();
     });
   }
+
+  sub(theme:Theme) {
+    if(theme.subscribed){
+      this.unsubscribe(theme.id);
+      return;
+    }
+    this.subscribe(theme.id);
+  }
+
 }
