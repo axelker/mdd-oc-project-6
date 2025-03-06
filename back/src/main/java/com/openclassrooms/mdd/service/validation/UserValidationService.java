@@ -1,4 +1,4 @@
-package com.openclassrooms.mdd.service.auth;
+package com.openclassrooms.mdd.service.validation;
 
 import java.util.NoSuchElementException;
 

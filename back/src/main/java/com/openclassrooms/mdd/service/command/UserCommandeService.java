@@ -7,7 +7,7 @@ import com.openclassrooms.mdd.dto.response.UserResponse;
 import com.openclassrooms.mdd.mapper.UserMapper;
 import com.openclassrooms.mdd.model.UserEntity;
 import com.openclassrooms.mdd.repository.UserRepository;
-import com.openclassrooms.mdd.service.auth.UserValidationService;
+import com.openclassrooms.mdd.service.validation.UserValidationService;
 
 @Service
 public class UserCommandeService {
