@@ -6,8 +6,8 @@ import { routes } from './app.routes';
 import { provideToastr } from 'ngx-toastr';
 import { provideCore } from './core/core.providers';
 import { provideIcons } from '@ng-icons/core';
-import { heroArrowLeft,heroArrowDown,heroArrowUp} from '@ng-icons/heroicons/outline';
-import { bootstrapSend} from '@ng-icons/bootstrap-icons';
+import { heroArrowLeft,heroArrowDown,heroArrowUp,heroUser} from '@ng-icons/heroicons/outline';
+import { bootstrapSend,bootstrapCircleFill} from '@ng-icons/bootstrap-icons';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideCore(),
-    provideIcons({ heroArrowLeft,heroArrowDown,heroArrowUp,bootstrapSend }),
+    provideIcons({ heroArrowLeft,heroArrowDown,heroArrowUp,heroUser,bootstrapCircleFill,bootstrapSend }),
     provideRouter(routes),
   ],
 };
