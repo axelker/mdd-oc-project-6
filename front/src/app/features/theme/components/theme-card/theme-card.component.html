@@ -1,0 +1,7 @@
+<div class="card flex flex-col gap-5 h-full w-full">
+    <span class="font-bold">{{theme.name}}</span>
+    <span class="card-description text-sm">{{theme.description}}</span>
+    <div class="flex justify-center">
+        <ng-content select="[buttons]"></ng-content>
+    </div>
+</div>

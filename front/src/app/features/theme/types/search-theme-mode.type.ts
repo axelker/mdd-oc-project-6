@@ -1,0 +1,1 @@
+export type searchThemeMode = 'all' | 'subscribed' | 'unsubscribed';

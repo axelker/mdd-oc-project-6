@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-import com.openclassrooms.mdd.dto.request.AuthRegisterRequest;
+import com.openclassrooms.mdd.dto.request.UserRequest;
 import com.openclassrooms.mdd.dto.response.UserResponse;
 import com.openclassrooms.mdd.model.UserEntity;
 
@@ -41,14 +41,14 @@ public class UserMapperTest {
     }
 
     @Test
-    void shouldMapAuthRegisterRequestToUserEntity() {
-        AuthRegisterRequest request = AuthRegisterRequest.builder()
+    void shouldMapUserRequestToUserEntity() {
+        UserRequest request = UserRequest.builder()
                 .email("test@test.fr")
                 .username("test")
                 .password("test-secret")
                 .build();
 
-        UserEntity userEntity = userMapper.authRegisterToEntity(request);
+        UserEntity userEntity = userMapper.toEntity(request);
 
         assertThat(userEntity).isNotNull();
         assertThat(userEntity.getUsername()).isEqualTo(request.getUsername());

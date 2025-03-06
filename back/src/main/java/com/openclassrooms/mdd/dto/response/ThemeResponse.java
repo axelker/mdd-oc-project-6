@@ -10,5 +10,7 @@ public class ThemeResponse {
 
     private String name;
 
+    private boolean isSubscribed;
+
     private String description;
 }
