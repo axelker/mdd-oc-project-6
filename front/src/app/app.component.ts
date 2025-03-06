@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavBarComponent } from "./shared/components/nav-bar/nav-bar.component";
+import { NavBarComponent } from "./shared/components/nav/nav-bar/nav-bar.component";
 import { SessionService } from './core/services/session.service';
 
 @Component({
