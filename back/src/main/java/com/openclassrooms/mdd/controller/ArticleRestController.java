@@ -1,5 +1,6 @@
 package com.openclassrooms.mdd.controller;
 
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +34,6 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 
 @Tag(name = "Articles", description = "Manage Articles.")
 @ApiResponses(value = {
@@ -51,7 +51,8 @@ public class ArticleRestController {
     private final JWTService jwtService;
 
     public ArticleRestController(ArticleQueryService articleQueryService, ArticleCommandService articleCommandService,
-            CommentCommandService commentCommandService, CommentQueryService commentQueryService,JWTService jwtService) {
+            CommentCommandService commentCommandService, CommentQueryService commentQueryService,
+            JWTService jwtService) {
         this.articleQueryService = articleQueryService;
         this.articleCommandService = articleCommandService;
         this.commentCommandService = commentCommandService;
@@ -70,7 +71,6 @@ public class ArticleRestController {
         return ResponseEntity.ok(articleQueryService.findById(id));
     }
 
-
     @Operation(summary = "Get articles from followed themes", description = "Retrieves all articles from the themes the authenticated user is subscribed to. "
             + "The results can be sorted by creation date.")
     @ApiResponses(value = {
@@ -80,29 +80,27 @@ public class ArticleRestController {
     @GetMapping("")
     public ResponseEntity<List<ArticleResponse>> findAll(
             @RequestParam(required = false, defaultValue = "true") Boolean desc,
-            Authentication authentication) {
-        Long userId = jwtService.getUserId(authentication);
+            @CookieValue(name = "jwt") String jwtToken) {
+        Long userId = jwtService.extractUserId(jwtToken);
         return ResponseEntity.ok(articleQueryService.findAllSubscribedByUser(desc.booleanValue(), userId));
     }
 
-
     @Operation(summary = "Create an article", description = "Allows an authenticated user to create article. ")
-        @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Article created successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ArticleResponse.class))),
-        @ApiResponse(responseCode = "400", description = "Bad Request - Invalid input (empty message, too long, etc.)", content = @Content),
-        @ApiResponse(responseCode = "404", description = "Not Found - Theme with the given ID does not exist", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Article created successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ArticleResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request - Invalid input (empty message, too long, etc.)", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not Found - Theme with the given ID does not exist", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
 
     })
     @PostMapping("")
     public ResponseEntity<ArticleResponse> create(@Valid @RequestBody ArticleRequest body,
-        Authentication authentication) {
-        Long userId = jwtService.getUserId(authentication);
+            @CookieValue(name = "jwt") String jwtToken) {
+        Long userId = jwtService.extractUserId(jwtToken);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(this.articleCommandService.create(body, userId));
 
     }
 
-        
     @Operation(summary = "Create a comment on an article", description = "Allows an authenticated user to add a comment to the specified article. "
             + "If the article does not exist, an error will be returned.")
     @ApiResponses(value = {
@@ -112,31 +110,23 @@ public class ArticleRestController {
     })
     @PostMapping("{id}/comments")
     public ResponseEntity<CommentResponse> createComment(@PathVariable Long id, @Valid @RequestBody CommentRequest body,
-            Authentication authentication) {
-        Long userId = jwtService.getUserId(authentication);
+            @CookieValue(name = "jwt") String jwtToken) {
+        Long userId = jwtService.extractUserId(jwtToken);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(this.commentCommandService.create(body, id, userId));
 
     }
 
-    @Operation(summary = "Get all comments on article", 
-           description = "Allows an authenticated user to view comments on an article. "
-                       + "If the article does not exist, an error will be returned.")
+    @Operation(summary = "Get all comments on article", description = "Allows an authenticated user to view comments on an article. "
+            + "If the article does not exist, an error will be returned.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "List of comments retrieved successfully", 
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, 
-                array = @ArraySchema(schema = @Schema(implementation = CommentResponse.class)))),
-        @ApiResponse(responseCode = "400", description = "Bad Request - Invalid input (empty message, too long, etc.)", 
-            content = @Content),
-        @ApiResponse(responseCode = "404", description = "Not Found - Article with the given ID does not exist", 
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, 
-                schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "200", description = "List of comments retrieved successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = CommentResponse.class)))),
+            @ApiResponse(responseCode = "400", description = "Bad Request - Invalid input (empty message, too long, etc.)", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not Found - Article with the given ID does not exist", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("{id}/comments")
-    public ResponseEntity<List<CommentResponse>> findAllComments(@PathVariable Long id,
-            Authentication authentication) {
-        Long userId = jwtService.getUserId(authentication);
-        return ResponseEntity.ok(this.commentQueryService.findAll(id, userId));
+    public ResponseEntity<List<CommentResponse>> findAllComments(@PathVariable Long id) {
+        return ResponseEntity.ok(this.commentQueryService.findAll(id));
 
     }
 }
