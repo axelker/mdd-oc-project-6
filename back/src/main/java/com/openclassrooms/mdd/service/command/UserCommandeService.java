@@ -1,5 +1,6 @@
 package com.openclassrooms.mdd.service.command;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mdd.dto.request.UserRequest;
@@ -7,6 +8,7 @@ import com.openclassrooms.mdd.dto.response.UserResponse;
 import com.openclassrooms.mdd.mapper.UserMapper;
 import com.openclassrooms.mdd.model.UserEntity;
 import com.openclassrooms.mdd.repository.UserRepository;
+import com.openclassrooms.mdd.service.auth.JWTService;
 import com.openclassrooms.mdd.service.validation.UserValidationService;
 
 @Service
@@ -14,11 +16,13 @@ public class UserCommandeService {
     private final UserValidationService userValidationService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final JWTService jwtService;
 
-    public UserCommandeService(UserRepository userRepository,UserMapper userMapper,UserValidationService userValidationService) {
+    public UserCommandeService(UserRepository userRepository,UserMapper userMapper,UserValidationService userValidationService,JWTService jwtService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userValidationService = userValidationService;
+        this.jwtService = jwtService;
     }
 
     public UserResponse create(UserRequest request) {
@@ -26,10 +30,11 @@ public class UserCommandeService {
         UserEntity userToSave = userMapper.toEntity(request).toBuilder().build();
         return userMapper.toDto(userRepository.save(userToSave));
     }
-    public UserResponse update(UserRequest request, Long userId) {
+    public ResponseCookie update(UserRequest request, Long userId) {
         this.userValidationService.validateUser(request,userId);
         UserEntity userToSave = userMapper.toEntity(request).toBuilder().id(userId).build();
-        return userMapper.toDto(userRepository.save(userToSave));
+        UserEntity savedUser = userRepository.save(userToSave);
+        return jwtService.generateJwtCookie(savedUser);
     }
 
 
