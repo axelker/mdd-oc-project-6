@@ -9,8 +9,6 @@ import {
 import { ControlErrorService } from '../../../../shared/services/control-error.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
-import { SessionService } from '../../../../core/services/session.service';
-import { AuthResponse } from '../../../../core/interfaces/auth-response';
 import { LoginRequest } from '../../../../core/interfaces/login-request';
 
 @Component({
@@ -28,7 +26,6 @@ export class LoginFormComponent {
       private controlErrorService: ControlErrorService,
       private authService: AuthService,
       private router: Router,
-      private sessionService: SessionService
     ) {
     this.formGroup = this.fb.group({
       identifier: new FormControl('', [Validators.required]),
@@ -55,8 +52,7 @@ export class LoginFormComponent {
   onSubmit(): void {
       const request: LoginRequest = this.formGroup.getRawValue();
       this.authService.login(request).subscribe({
-        next: (res: AuthResponse) => {
-          this.sessionService.logUser(res.token);
+        next: (_) => {
           this.router.navigate(['/articles']);
         },
       });

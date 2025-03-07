@@ -1,14 +1,20 @@
 import { inject } from '@angular/core';
-import { HttpEvent, HttpRequest, HttpErrorResponse, HttpHandlerFn } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import { HttpEvent, HttpRequest, HttpErrorResponse, HttpHandlerFn, HttpContextToken } from '@angular/common/http';
+import { EMPTY, Observable, catchError, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
+
+export const IGNORED_STATUSES = new HttpContextToken<number[]>(() => []);
 
 
 export function httpErrorInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
     const toastr = inject(ToastrService);
+    const ignoredStatuses = req.context.get(IGNORED_STATUSES);
     return next(req).pipe(
       catchError((error: HttpErrorResponse) => {
+        if (ignoredStatuses?.includes(error.status)) {
+          return EMPTY;
+        }
         handleError(error,toastr);
         return throwError(() => error);
       })

@@ -21,12 +21,15 @@ public class OpenAPIConfiguration {
                 .version("1.0")
                 .description("This API exposes endpoints to manage article on dev.")
                 .contact(contact);
+
         return new OpenAPI()
                 .info(information)
-                .addSecurityItem(new SecurityRequirement().addList("BearerAuth"))
-                .components(new Components().addSecuritySchemes("BearerAuth", new SecurityScheme()
-                        .name("BearerAuth").type(SecurityScheme.Type.HTTP).scheme("bearer")
-                        .bearerFormat("JWT")));
+                .addSecurityItem(new SecurityRequirement().addList("JWT-Cookie"))
+                .components(new Components()
+                        .addSecuritySchemes("JWT-Cookie", new SecurityScheme()
+                                .name("jwt")
+                                .type(SecurityScheme.Type.APIKEY)
+                                .in(SecurityScheme.In.COOKIE)));
 
     }
 }

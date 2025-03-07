@@ -23,7 +23,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,9 +56,10 @@ public class ThemeRestController {
                         @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected server issue", content = @Content)
         })
         @GetMapping
-        public ResponseEntity<List<ThemeResponse>> getAllThemes(@RequestParam(required = false) Boolean subscribed,Authentication authentication) {
-                Long userId = jwtService.getUserId(authentication);
-                return ResponseEntity.ok(themeQueryService.findAll(userId,subscribed));
+        public ResponseEntity<List<ThemeResponse>> getAllThemes(@RequestParam(required = false) Boolean subscribed,
+                        @CookieValue(name = "jwt") String jwtToken) {
+                Long userId = jwtService.extractUserId(jwtToken);
+                return ResponseEntity.ok(themeQueryService.findAll(userId, subscribed));
         }
 
         @Operation(summary = "Create a subscription", description = "Add a new subscription for the theme provided to the system.")
@@ -69,8 +70,8 @@ public class ThemeRestController {
         })
         @PostMapping("{id}/subscribe")
         public ResponseEntity<Response> create(@PathVariable Long id,
-                        Authentication authentication) {
-                Long userId = jwtService.getUserId(authentication);
+                        @CookieValue(name = "jwt") String jwtToken) {
+                Long userId = jwtService.extractUserId(jwtToken);
                 this.themeCommandService.subscribe(id, userId);
                 return ResponseEntity.status(HttpStatus.CREATED)
                                 .body(Response.builder().message("Subscribe successfully !").build());
@@ -85,8 +86,8 @@ public class ThemeRestController {
                         @ApiResponse(responseCode = "404", description = "Not Found - Subscription does not exist", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
         })
         @DeleteMapping("{id}/unsubscribe")
-        public ResponseEntity<Response> delete(@PathVariable Long id, Authentication authentication) {
-                Long userId = jwtService.getUserId(authentication);
+        public ResponseEntity<Response> delete(@PathVariable Long id, @CookieValue(name = "jwt") String jwtToken) {
+                Long userId = jwtService.extractUserId(jwtToken);
                 this.themeCommandService.unsubscribe(id, userId);
                 return ResponseEntity.ok(Response.builder().message("Unsubscribe successfully !").build());
 
