@@ -4,8 +4,6 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { ControlErrorService } from '../../../../shared/services/control-error.service';
 import { UserInfo } from '../../../../core/interfaces/user-info';
 import { ToastrService } from 'ngx-toastr';
-import { SessionService } from '../../../../core/services/session.service';
-import { Router } from '@angular/router';
 import { UserRequest } from '../../../../core/interfaces/user-request';
 
 @Component({
@@ -23,8 +21,6 @@ formGroup!: FormGroup;
     private controlErrorService: ControlErrorService,
     private authService: AuthService,
     private toastr: ToastrService,
-    private sessionService: SessionService,
-    private router: Router
   ) {
     this.initForm();
     this.authService.getUserInfo().subscribe((user:UserInfo) => {
@@ -87,8 +83,4 @@ formGroup!: FormGroup;
     });
   }
 
-  logout(): void {
-    this.sessionService.logOutUser();
-    this.router.navigate(['/']);
-  }
 }

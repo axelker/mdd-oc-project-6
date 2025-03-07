@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { BackButtonComponent } from "../../../../shared/components/back-button/back-button.component";
 
 @Component({
-  selector: 'app-unauth-nav-bar',
+  selector: 'app-unauth-header',
   standalone: true,
   imports: [BackButtonComponent],
-  templateUrl: './unauth-nav-bar.component.html',
-  styleUrl: './unauth-nav-bar.component.scss'
+  templateUrl: './unauth-header.component.html',
+  styleUrl: './unauth-header.component.scss'
 })
-export class UnauthNavBarComponent {
+export class UnauthHeaderComponent {
 
 }

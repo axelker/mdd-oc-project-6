@@ -1,27 +1,26 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { UserInfo } from '../interfaces/user-info';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
-  private TOKEN_SESSION_KEY: string = "token";
-  constructor(private router: Router) { }
+  private USER_SESSION_KEY: string = "user";
 
-  public getToken() : string {
-    return localStorage.getItem(this.TOKEN_SESSION_KEY) ?? '';
+  constructor() { }
+
+  public getUser() : UserInfo | null {
+    const user : string | null = localStorage.getItem(this.USER_SESSION_KEY);
+    return user === null ? null : JSON.parse(user);
   }
-  
-  public isLogged():boolean {
-    return !!this.getToken();
+  get isLogged(): boolean {
+    return this.getUser() !== null;
   }
-  
-  public logUser(token:string):void {
-    localStorage.setItem(this.TOKEN_SESSION_KEY,token);
+  public logUser(user:UserInfo):void {
+    localStorage.setItem(this.USER_SESSION_KEY,JSON.stringify(user));
   }
 
   public logOutUser():void {
-    localStorage.removeItem(this.TOKEN_SESSION_KEY);
-    this.router.navigate(['/auth']);
+    localStorage.removeItem(this.USER_SESSION_KEY);
   }
 }
