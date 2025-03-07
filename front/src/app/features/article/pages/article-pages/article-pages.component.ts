@@ -6,7 +6,7 @@ import { NgIcon } from '@ng-icons/core';
 @Component({
   selector: 'app-article-pages',
   standalone: true,
-  imports: [ArticlesListComponent,RouterLink,NgIcon],
+  imports: [ArticlesListComponent, RouterLink, NgIcon],
   templateUrl: './article-pages.component.html',
   styleUrl: './article-pages.component.scss'
 })
