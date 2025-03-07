@@ -2,6 +2,7 @@ package com.openclassrooms.mdd.service.auth;
 
 import java.util.NoSuchElementException;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mdd.dto.request.AuthLoginRequest;
 import com.openclassrooms.mdd.dto.request.UserRequest;
-import com.openclassrooms.mdd.dto.response.AuthResponse;
 import com.openclassrooms.mdd.dto.response.UserResponse;
 import com.openclassrooms.mdd.model.UserEntity;
 import com.openclassrooms.mdd.repository.UserRepository;
@@ -33,16 +33,14 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
-    public AuthResponse register(UserRequest request) throws Exception {
+    public ResponseCookie register(UserRequest request) throws Exception {
         UserResponse userResponse = this.userCommandeService.create(request);
         UserEntity user = userRepository.findById(userResponse.getId())
             .orElseThrow(() -> new NoSuchElementException("User not found after creation."));
-        String token = jwtService.generateToken(user);
-
-        return AuthResponse.builder().token(token).build();
+        return jwtService.generateJwtCookie(user);
     }
 
-    public AuthResponse authenticate(AuthLoginRequest request) {
+    public ResponseCookie authenticate(AuthLoginRequest request) {
         try {
             var test = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -50,12 +48,15 @@ public class AuthenticationService {
                             request.getPassword()));
 
             UserEntity user = (UserEntity) test.getPrincipal();
-            String token = jwtService.generateToken(user);
-            return AuthResponse.builder().token(token).build();
+            return jwtService.generateJwtCookie(user);
 
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Invalid email or password.");
         }
+    }
+
+    public ResponseCookie logout() {
+        return jwtService.generateJwtLogoutCookie();
     }
 
 }
