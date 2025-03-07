@@ -1,5 +1,7 @@
 # MDD System
 
+![Mdd image](./resources/mdd.png)
+
 MDD (Monde de Dév) **is a social network designed specifically for developers, aiming to facilitate connections between professionals in the field and encourage collaboration and knowledge sharing. The primary goal is to help developers find job opportunities and share their expertise through topic-based discussions and technical content.** The project will be built using Spring Boot for the backend and Angular for the frontend, ensuring a modern and scalable web application architecture.
 
 ---
@@ -19,6 +21,8 @@ Before running this project, make sure you have the following installed:
 - **Java 17** → This project requires Java 17 as the runtime environment. Ensure you have it installed. [Download](https://jdk.java.net/archive/)
 - **Maven** → Used for managing project dependencies and building the application. [Installation Guide](https://maven.apache.org/install.html)
 - **MySQL** → The backend database for storing application data. [Setup Instructions](https://openclassrooms.com/fr/courses/6971126-implementez-vos-bases-de-donnees-relationnelles-avec-sql/7152681-installez-le-sgbd-mysql)
+- **Node.js** → Node.js is required to run the Angular development server and install dependencies. [Download](https://nodejs.org/en/download)
+
 
 ---
 
@@ -89,6 +93,27 @@ mvn clean package
 The application will be available at **[http://localhost:8080](http://localhost:8080)**.
 
 
+### Frontend
+
+#### Installing Frontend Dependencies
+Navigate to the frontend project directory.
+Install the required dependencies using npm (Node Package Manager):
+```sh 
+   npm install
+```
+This will install all the necessary packages defined in the package.json file.
+
+#### Development Server
+After installing dependencies, you can start the frontend development server:
+
+Run the following command to start the development server:
+```sh
+npm start
+```
+The application will be available at http://localhost:4200.
+The development server will automatically reload if you change any of the source files.
+
+
 ---
 
 ## API Documentation
@@ -99,10 +124,11 @@ The API documentation is available via **Swagger UI** at:
 
 It includes:
 
-- Authentication (`/auth/register`, `/auth/login`)
+- Authentication (`/auth`)
 - Article management (`/articles`)
-- Comments system (`/comments`)
-- Subscription system (`/subscriptions`)
+- Comments system (`/articles/comments`)
 - Theme system (`/themes`)
+- Subscription system (`/themes/subscriptions`)
+
 
 ---
