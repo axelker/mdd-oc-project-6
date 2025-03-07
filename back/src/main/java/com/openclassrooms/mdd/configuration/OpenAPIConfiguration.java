@@ -10,9 +10,21 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 
+/**
+ * Configuration class for OpenAPI documentation.
+ * <p>
+ * This class sets up the OpenAPI specification for the API, defining metadata such as title,
+ * version, description, and security scheme.
+ * </p>
+ */
 @Configuration
 public class OpenAPIConfiguration {
 
+    /**
+     * Defines the OpenAPI specification with metadata and security configurations.
+     *
+     * @return an {@link OpenAPI} instance with the API details and security settings.
+     */
     @Bean
     public OpenAPI customOpenAPI() {
         Contact contact = new Contact().name("Axel").email("axelker@outlook.fr");

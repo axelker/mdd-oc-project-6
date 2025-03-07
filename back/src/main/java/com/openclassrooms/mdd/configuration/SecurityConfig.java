@@ -22,6 +22,13 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.openclassrooms.mdd.configuration.filter.JwtCookieFilter;
 import com.openclassrooms.mdd.service.query.UserQueryService;
 
+/**
+ * Security configuration class for managing authentication and authorization settings.
+ * <p>
+ * This class configures Spring Security, including JWT-based authentication,
+ * password encoding, and method security.
+ * </p>
+ */
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -34,10 +41,24 @@ public class SecurityConfig {
 
     private final UserQueryService userDetailsService;
 
+    /**
+     * Constructs the security configuration with the provided {@link UserQueryService}.
+     *
+     * @param userDetailsService the service used for loading user details.
+     */
     public SecurityConfig(UserQueryService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Configures security filters and authentication settings.
+     *
+     * @param http                    the {@link HttpSecurity} object to configure security settings.
+     * @param jwtCookieFilter          the JWT filter for authentication.
+     * @param authenticationEntryPoint the custom entry point for unauthorized requests.
+     * @return a {@link SecurityFilterChain} defining the security configuration.
+     * @throws Exception if an error occurs while configuring security.
+     */
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http,JwtCookieFilter jwtCookieFilter,CustomAuthEntryPoint authenticationEntryPoint) throws Exception {
         return http
@@ -51,21 +72,43 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * Configures the JWT decoder for verifying JWT tokens.
+     *
+     * @return a {@link JwtDecoder} for decoding JWT tokens.
+     */
     @Bean
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withSecretKey(new SecretKeySpec(this.jwtSecret.getBytes(), "HmacSHA256")).build();
     }
 
+    /**
+     * Configures the JWT encoder for signing JWT tokens.
+     *
+     * @return a {@link JwtEncoder} for encoding JWT tokens.
+     */
     @Bean
     public JwtEncoder jwtEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(this.jwtSecret.getBytes()));
     }
 
+    /**
+     * Configures the password encoder using BCrypt.
+     *
+     * @return a {@link BCryptPasswordEncoder} instance.
+     */
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Configures the authentication manager with user details and password encoding.
+     *
+     * @param http the {@link HttpSecurity} object to configure authentication.
+     * @return an {@link AuthenticationManager} instance.
+     * @throws Exception if an error occurs while building the authentication manager.
+     */
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http

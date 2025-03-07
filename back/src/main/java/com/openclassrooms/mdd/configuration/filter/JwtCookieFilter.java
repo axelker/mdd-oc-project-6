@@ -20,20 +20,41 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
+/**
+ * Filter responsible for extracting a JWT token from cookies, validating it,
+ * and setting the authentication context in Spring Security.
+ */
 @Component
 public class JwtCookieFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
     private final UserDetailsService userDetailsService;
 
+    /**
+     * Constructs a new JwtCookieFilter with the specified JWT service and user details service.
+     *
+     * @param jwtService        the service for handling JWT operations
+     * @param userDetailsService the service for loading user details
+     */
     public JwtCookieFilter(JWTService jwtService, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Filters incoming requests to extract JWT tokens from cookies, validate them,
+     * and set authentication in the security context if valid.
+     *
+     * @param request  the HTTP request
+     * @param response the HTTP response
+     * @param chain    the filter chain
+     * @throws ServletException if a servlet exception occurs
+     * @throws IOException      if an I/O error occurs
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+
         String jwt = Arrays.stream(Optional.ofNullable(request.getCookies()).orElse(new Cookie[0]))
                 .filter(cookie -> "jwt".equals(cookie.getName()))
                 .map(Cookie::getValue)
