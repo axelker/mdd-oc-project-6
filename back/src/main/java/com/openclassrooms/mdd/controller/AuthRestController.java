@@ -11,7 +11,6 @@ import com.openclassrooms.mdd.dto.response.ErrorResponse;
 import com.openclassrooms.mdd.dto.response.Response;
 import com.openclassrooms.mdd.dto.response.UserResponse;
 import com.openclassrooms.mdd.service.auth.AuthenticationService;
-import com.openclassrooms.mdd.service.auth.JWTService;
 import com.openclassrooms.mdd.service.command.UserCommandeService;
 import com.openclassrooms.mdd.service.query.UserQueryService;
 
@@ -29,7 +28,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
@@ -50,7 +48,6 @@ public class AuthRestController {
         private final AuthenticationService authService;
         private final UserQueryService userQueryService;
         private final UserCommandeService userCommandService;
-        private final JWTService jwtService;
 
         /**
          * Constructs an instance of {@code AuthRestController}.
@@ -59,20 +56,17 @@ public class AuthRestController {
          *                           and registration.
          * @param userQueryService   the service for retrieving user data.
          * @param userCommandService the service for updating user data.
-         * @param jwtService         the service for handling JWT token operations.
          */
         AuthRestController(AuthenticationService authService, UserQueryService userQueryService,
-                        UserCommandeService userCommandService, JWTService jwtService) {
+                        UserCommandeService userCommandService) {
                 this.authService = authService;
                 this.userQueryService = userQueryService;
                 this.userCommandService = userCommandService;
-                this.jwtService = jwtService;
         }
 
         /**
          * Retrieves the authenticated user's information.
          *
-         * @param jwtToken the JWT token extracted from cookies.
          * @return the authenticated user's details wrapped in a {@link ResponseEntity}.
          */
         @Operation(summary = "Find info of current user authenticate", description = "Retrieve details of a user using its authentication information.")
@@ -83,8 +77,8 @@ public class AuthRestController {
 
         })
         @GetMapping("me")
-        public ResponseEntity<UserResponse> getMe(@CookieValue(name = "jwt") String jwtToken) {
-                Long userId = jwtService.extractUserId(jwtToken);
+        public ResponseEntity<UserResponse> getMe() {
+                Long userId = authService.getAuthenticatedUserId();
                 return ResponseEntity.ok(userQueryService.findById(userId));
         }
 
@@ -92,7 +86,6 @@ public class AuthRestController {
          * Updates the authenticated user's profile information.
          *
          * @param body     the request body containing the updated user details.
-         * @param jwtToken the JWT token extracted from cookies.
          * @return the updated user information wrapped in a {@link ResponseEntity}.
          */
         @Operation(summary = "Update current user", description = "Allows the authenticated user to update their profile information.")
@@ -102,9 +95,8 @@ public class AuthRestController {
                         @ApiResponse(responseCode = "404", description = "Not Found - User does not exist", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
         })
         @PutMapping("me")
-        public ResponseEntity<UserResponse> update(@Valid @RequestBody UserRequest body,
-                        @CookieValue(name = "jwt") String jwtToken) {
-                Long userId = jwtService.extractUserId(jwtToken);
+        public ResponseEntity<UserResponse> update(@Valid @RequestBody UserRequest body) {
+                Long userId = authService.getAuthenticatedUserId();
                 ResponseCookie jwtCookie = userCommandService.update(body, userId);
                 return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                                 .body(userQueryService.findById(userId));

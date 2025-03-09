@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -109,7 +110,11 @@ public class JWTService {
      */
     public boolean validateToken(String token) {
         try {
-            jwtDecoder.decode(token);
+            Jwt decodedJwt = jwtDecoder.decode(token);
+            Instant expirationTime = decodedJwt.getExpiresAt();
+            if (expirationTime == null || expirationTime.isBefore(Instant.now())) {
+                return false;
+            }
             return true;
         } catch (JwtException e) {
             return false;

@@ -1,6 +1,5 @@
 package com.openclassrooms.mdd.controller;
 
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +13,7 @@ import com.openclassrooms.mdd.dto.request.CommentRequest;
 import com.openclassrooms.mdd.dto.response.ArticleResponse;
 import com.openclassrooms.mdd.dto.response.CommentResponse;
 import com.openclassrooms.mdd.dto.response.ErrorResponse;
-import com.openclassrooms.mdd.service.auth.JWTService;
+import com.openclassrooms.mdd.service.auth.AuthenticationService;
 import com.openclassrooms.mdd.service.command.ArticleCommandService;
 import com.openclassrooms.mdd.service.command.CommentCommandService;
 import com.openclassrooms.mdd.service.query.ArticleQueryService;
@@ -52,31 +51,31 @@ import org.springframework.http.ResponseEntity;
 @RequestMapping("/articles")
 public class ArticleRestController {
 
+        private final AuthenticationService authenticationService;
         private final ArticleQueryService articleQueryService;
         private final ArticleCommandService articleCommandService;
         private final CommentCommandService commentCommandService;
         private final CommentQueryService commentQueryService;
-        private final JWTService jwtService;
 
         /**
          * Constructs the ArticleRestController with required services.
-         *
+         * @param authenticationService service for handling authentication. 
          * @param articleQueryService   service for querying articles.
          * @param articleCommandService service for handling article creation and
          *                              updates.
          * @param commentCommandService service for handling comment creation.
          * @param commentQueryService   service for querying comments.
-         * @param jwtService            service for JWT token processing.
          */
-        public ArticleRestController(ArticleQueryService articleQueryService,
+        public ArticleRestController(AuthenticationService authenticationService,
+                        ArticleQueryService articleQueryService,
                         ArticleCommandService articleCommandService,
-                        CommentCommandService commentCommandService, CommentQueryService commentQueryService,
-                        JWTService jwtService) {
+                        CommentCommandService commentCommandService, 
+                        CommentQueryService commentQueryService) {
+                this.authenticationService = authenticationService;
                 this.articleQueryService = articleQueryService;
                 this.articleCommandService = articleCommandService;
                 this.commentCommandService = commentCommandService;
                 this.commentQueryService = commentQueryService;
-                this.jwtService = jwtService;
         }
 
         /**
@@ -100,7 +99,6 @@ public class ArticleRestController {
          * Retrieves all articles from followed themes for the authenticated user.
          *
          * @param desc     whether to sort results in descending order (default: true).
-         * @param jwtToken the JWT token from cookies to identify the user.
          * @return a list of articles wrapped in a {@link ResponseEntity}.
          */
         @Operation(summary = "Get articles from followed themes", description = "Retrieves all articles from the themes the authenticated user is subscribed to. "
@@ -111,9 +109,8 @@ public class ArticleRestController {
         })
         @GetMapping("")
         public ResponseEntity<List<ArticleResponse>> findAll(
-                        @RequestParam(required = false, defaultValue = "true") Boolean desc,
-                        @CookieValue(name = "jwt") String jwtToken) {
-                Long userId = jwtService.extractUserId(jwtToken);
+                        @RequestParam(required = false, defaultValue = "true") Boolean desc) {
+                Long userId = authenticationService.getAuthenticatedUserId();
                 return ResponseEntity.ok(articleQueryService.findAllSubscribedByUser(desc.booleanValue(), userId));
         }
 
@@ -121,7 +118,6 @@ public class ArticleRestController {
          * Creates a new article.
          *
          * @param body     the request body containing article details.
-         * @param jwtToken the JWT token from cookies to authenticate the user.
          * @return the created article wrapped in a {@link ResponseEntity} with HTTP 201
          *         status.
          */
@@ -133,9 +129,8 @@ public class ArticleRestController {
 
         })
         @PostMapping("")
-        public ResponseEntity<ArticleResponse> create(@Valid @RequestBody ArticleRequest body,
-                        @CookieValue(name = "jwt") String jwtToken) {
-                Long userId = jwtService.extractUserId(jwtToken);
+        public ResponseEntity<ArticleResponse> create(@Valid @RequestBody ArticleRequest body) {
+                Long userId = authenticationService.getAuthenticatedUserId();
                 return ResponseEntity.status(HttpStatus.CREATED)
                                 .body(this.articleCommandService.create(body, userId));
 
@@ -146,7 +141,6 @@ public class ArticleRestController {
          *
          * @param id       the ID of the article to comment on.
          * @param body     the request body containing comment details.
-         * @param jwtToken the JWT token from cookies to authenticate the user.
          * @return the created comment wrapped in a {@link ResponseEntity} with HTTP 201
          *         status.
          */
@@ -159,9 +153,8 @@ public class ArticleRestController {
         })
         @PostMapping("{id}/comments")
         public ResponseEntity<CommentResponse> createComment(@PathVariable Long id,
-                        @Valid @RequestBody CommentRequest body,
-                        @CookieValue(name = "jwt") String jwtToken) {
-                Long userId = jwtService.extractUserId(jwtToken);
+                        @Valid @RequestBody CommentRequest body) {
+                Long userId = authenticationService.getAuthenticatedUserId();
                 return ResponseEntity.status(HttpStatus.CREATED)
                                 .body(this.commentCommandService.create(body, id, userId));
 

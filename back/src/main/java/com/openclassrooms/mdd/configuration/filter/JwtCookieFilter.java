@@ -61,14 +61,19 @@ public class JwtCookieFilter extends OncePerRequestFilter {
                 .findFirst()
                 .orElse(null);
 
-        if (null != jwt && !jwt.isBlank() && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (null != jwt && !jwt.isBlank()) {
             String username = jwtService.extractUsername(jwt);
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            if (jwtService.validateToken(jwt)) {
+            boolean tokenIsValid = jwtService.validateToken(jwt);
+            
+            if (!tokenIsValid) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+            if (tokenIsValid && SecurityContextHolder.getContext().getAuthentication() == null) {
                 var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }

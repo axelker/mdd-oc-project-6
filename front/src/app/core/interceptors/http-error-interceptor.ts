@@ -13,7 +13,7 @@ export function httpErrorInterceptor(req: HttpRequest<unknown>, next: HttpHandle
     return next(req).pipe(
       catchError((error: HttpErrorResponse) => {
         if (ignoredStatuses?.includes(error.status)) {
-          return EMPTY;
+          return throwError(() => error);
         }
         handleError(error,toastr);
         return throwError(() => error);

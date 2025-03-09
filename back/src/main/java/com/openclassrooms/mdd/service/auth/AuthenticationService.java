@@ -6,11 +6,14 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.mdd.dto.request.AuthLoginRequest;
 import com.openclassrooms.mdd.dto.request.UserRequest;
 import com.openclassrooms.mdd.dto.response.UserResponse;
+import com.openclassrooms.mdd.exception.UnauthorizedActionException;
 import com.openclassrooms.mdd.model.UserEntity;
 import com.openclassrooms.mdd.repository.UserRepository;
 import com.openclassrooms.mdd.service.command.UserCommandeService;
@@ -100,5 +103,19 @@ public class AuthenticationService {
      */
     public ResponseCookie logout() {
         return jwtService.generateJwtLogoutCookie();
+    }
+
+    /**
+     * Return the id of Authenticated user.
+     * @return
+     */
+    public Long getAuthenticatedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserEntity)) {
+            throw new UnauthorizedActionException("User is not authenticated.");
+        }
+
+        Long userId = ((UserEntity) authentication.getPrincipal()).getId();
+        return userId;
     }
 }

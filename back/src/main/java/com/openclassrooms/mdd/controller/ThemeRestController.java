@@ -8,7 +8,7 @@ import com.openclassrooms.mdd.dto.response.CommentResponse;
 import com.openclassrooms.mdd.dto.response.ErrorResponse;
 import com.openclassrooms.mdd.dto.response.Response;
 import com.openclassrooms.mdd.dto.response.ThemeResponse;
-import com.openclassrooms.mdd.service.auth.JWTService;
+import com.openclassrooms.mdd.service.auth.AuthenticationService;
 import com.openclassrooms.mdd.service.command.ThemeCommandService;
 import com.openclassrooms.mdd.service.query.ThemeQueryService;
 
@@ -23,7 +23,6 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,28 +46,27 @@ public class ThemeRestController {
 
         private final ThemeQueryService themeQueryService;
         private final ThemeCommandService themeCommandService;
-        private final JWTService jwtService;
+        private final AuthenticationService authenticationService;
 
         /**
          * Constructs the {@code ThemeRestController} with required services.
          *
          * @param themeQueryService   the service for querying themes.
          * @param themeCommandService the service for managing theme subscriptions.
-         * @param jwtService          the service for handling JWT authentication.
+         * @param authenticationService service for handling authentication.
          */
         public ThemeRestController(ThemeQueryService themeQueryService,
                         ThemeCommandService themeCommandService,
-                        JWTService jwtService) {
+                        AuthenticationService authenticationService) {
                 this.themeQueryService = themeQueryService;
                 this.themeCommandService = themeCommandService;
-                this.jwtService = jwtService;
+                this.authenticationService = authenticationService;
         }
 
         /**
          * Retrieves all available themes.
          *
          * @param subscribed (optional) filter to return only subscribed themes.
-         * @param jwtToken   the JWT token from cookies to authenticate the user.
          * @return a list of themes wrapped in a {@link ResponseEntity}.
          */
         @Operation(summary = "Get all themes", description = "Retrieve all available themes. This endpoint returns a list of themes that can be used in the application.")
@@ -77,9 +75,8 @@ public class ThemeRestController {
                         @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected server issue", content = @Content)
         })
         @GetMapping
-        public ResponseEntity<List<ThemeResponse>> getAllThemes(@RequestParam(required = false) Boolean subscribed,
-                        @CookieValue(name = "jwt") String jwtToken) {
-                Long userId = jwtService.extractUserId(jwtToken);
+        public ResponseEntity<List<ThemeResponse>> getAllThemes(@RequestParam(required = false) Boolean subscribed) {
+                Long userId = authenticationService.getAuthenticatedUserId();
                 return ResponseEntity.ok(themeQueryService.findAll(userId, subscribed));
         }
 
@@ -87,7 +84,6 @@ public class ThemeRestController {
          * Retrieves all available themes.
          *
          * @param subscribed (optional) filter to return only subscribed themes.
-         * @param jwtToken   the JWT token from cookies to authenticate the user.
          * @return a list of themes wrapped in a {@link ResponseEntity}.
          */
         @Operation(summary = "Create a subscription", description = "Add a new subscription for the theme provided to the system.")
@@ -97,9 +93,8 @@ public class ThemeRestController {
                         @ApiResponse(responseCode = "404", description = "Not Found - Theme does not exist", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
         })
         @PostMapping("{id}/subscribe")
-        public ResponseEntity<Response> create(@PathVariable Long id,
-                        @CookieValue(name = "jwt") String jwtToken) {
-                Long userId = jwtService.extractUserId(jwtToken);
+        public ResponseEntity<Response> create(@PathVariable Long id) {
+                Long userId = authenticationService.getAuthenticatedUserId();
                 this.themeCommandService.subscribe(id, userId);
                 return ResponseEntity.status(HttpStatus.CREATED)
                                 .body(Response.builder().message("Subscribe successfully !").build());
@@ -110,7 +105,6 @@ public class ThemeRestController {
          * Unsubscribes the authenticated user from a theme.
          *
          * @param id       the ID of the theme to unsubscribe from.
-         * @param jwtToken the JWT token from cookies to authenticate the user.
          * @return a response confirming successful unsubscription.
          */
         @Operation(summary = "Delete a subscription", description = "Unsubscribe a user from a theme by deleting the subscription. "
@@ -121,8 +115,8 @@ public class ThemeRestController {
                         @ApiResponse(responseCode = "404", description = "Not Found - Subscription does not exist", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)))
         })
         @DeleteMapping("{id}/unsubscribe")
-        public ResponseEntity<Response> delete(@PathVariable Long id, @CookieValue(name = "jwt") String jwtToken) {
-                Long userId = jwtService.extractUserId(jwtToken);
+        public ResponseEntity<Response> delete(@PathVariable Long id) {
+                Long userId = authenticationService.getAuthenticatedUserId();
                 this.themeCommandService.unsubscribe(id, userId);
                 return ResponseEntity.ok(Response.builder().message("Unsubscribe successfully !").build());
         }
